@@ -28,25 +28,23 @@ namespace Ludiq.Peek
 				return;
 			}
 
+			Profiler.BeginSample("Peek." + nameof(Creator));
+
 			try
 			{
-				Profiler.BeginSample("Peek." + nameof(Creator));
+				var position = sceneView.GetInnerGuiPosition(); 
 
-				var position = sceneView.GetInnerGuiPosition();
+				Handles.BeginGUI();
 
 				var shortcut = PeekPlugin.Configuration.creatorShortcut;
-				var preview = shortcut.Preview(e);
-				var activate = shortcut.Check(e);
-				
-				if (position.Contains(e.mousePosition) && (preview || activate))
-				{
-					Handles.BeginGUI();
 
+				if (position.Contains(e.mousePosition))
+				{
 					var filter = ProbeFilter.@default;
 					filter.proBuilder = false; // Too slow and useless here anyway
 					var hit = Probe.Pick(filter, sceneView, e.mousePosition, out var point);
 
-					if (preview)
+					if (shortcut.Preview(e))
 					{
 						var createIndicatorStyle = LudiqStyles.CommandButton(true, true);
 						var createIndicatorContent = LudiqGUIUtility.TempContent(PeekPlugin.Icons.createGameObjectOptions?[IconSize.Small]);
@@ -68,7 +66,7 @@ namespace Ludiq.Peek
 						);
 					}
 
-					if (activate)
+					if (shortcut.Check(e))
 					{
 						var activatorPosition = new Rect(e.mousePosition, Vector2.zero);
 						activatorPosition.width = 220;
@@ -90,7 +88,7 @@ namespace Ludiq.Peek
 
 								var is2D = instance.GetComponent<RectTransform>() != null ||
 								           instance.GetComponent<SpriteRenderer>() != null;
-
+								
 								if (_hit != null)
 								{
 									instance.transform.SetParent(_hit.Value.transform.parent, true);
@@ -119,11 +117,11 @@ namespace Ludiq.Peek
 						e.Use();
 					}
 
-#if LUDIQ_PEEK_INTEROP_PROBUILDER
+					#if LUDIQ_PEEK_INTEROP_PROBUILDER
 					UnityEditor.ProBuilder.EditorUtility.SynchronizeWithMeshFilter(null);
-#endif
+					#endif
 
-					if (preview)
+					if (shortcut.Preview(e))
 					{
 						Handles.EndGUI();
 
@@ -140,20 +138,21 @@ namespace Ludiq.Peek
 
 						Handles.BeginGUI();
 					}
-
-					sceneView.Repaint();
-
-					Handles.EndGUI();
 				}
+
+				if (position.Contains(e.mousePosition))
+				{
+					sceneView.Repaint();
+				}
+
+				Handles.EndGUI();
 			}
 			catch (Exception ex)
 			{
 				Debug.LogException(ex);
 			}
-			finally
-			{
-				Profiler.EndSample();
-			}
+
+			Profiler.EndSample();
 		}
 
 		private static class Styles

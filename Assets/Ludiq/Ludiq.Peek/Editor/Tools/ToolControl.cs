@@ -371,7 +371,7 @@ namespace Ludiq.Peek
 
 			if (showTooltip)
 			{
-				var tooltipContent = new GUIContent(hasShortcut ? shortcutLabel : tool.tooltip);
+				var tooltipContent = new GUIContent(hasShortcut ? (shortcutLabel ?? (shortcutIndex % 10).ToString()) : tool.tooltip);
 				var tooltipStyle = PeekStyles.sceneViewTooltip;
 				var tooltipSize = tooltipStyle.CalcSize(tooltipContent);
 

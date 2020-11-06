@@ -43,28 +43,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: legacyProject
-    - Name: $v
-      Entry: 7
-      Data: 2|System.Boolean, mscorlib
-    - Name: 
-      Entry: 5
-      Data: false
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
       Data: favoriteMembers
     - Name: $v
       Entry: 7
-      Data: 3|System.Collections.Generic.HashSet`1[[Ludiq.PeekCore.Member, Ludiq.PeekCore.Runtime]],
+      Data: 2|System.Collections.Generic.HashSet`1[[Ludiq.PeekCore.Member, Ludiq.PeekCore.Runtime]],
         System.Core
     - Name: 
       Entry: 12
@@ -86,7 +68,7 @@ MonoBehaviour:
       Data: projectSetupCompleted
     - Name: $v
       Entry: 7
-      Data: 4|System.Boolean, mscorlib
+      Data: 3|System.Boolean, mscorlib
     - Name: 
       Entry: 5
       Data: true
@@ -104,7 +86,7 @@ MonoBehaviour:
       Data: savedVersion
     - Name: $v
       Entry: 7
-      Data: 5|Ludiq.PeekCore.SemanticVersion, Ludiq.PeekCore.Editor
+      Data: 4|Ludiq.PeekCore.SemanticVersion, Ludiq.PeekCore.Editor
     - Name: major
       Entry: 3
       Data: 2
@@ -120,6 +102,24 @@ MonoBehaviour:
     - Name: increment
       Entry: 3
       Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: legacyProject
+    - Name: $v
+      Entry: 7
+      Data: 5|System.Boolean, mscorlib
+    - Name: 
+      Entry: 5
+      Data: false
     - Name: 
       Entry: 8
       Data: 

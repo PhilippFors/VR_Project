@@ -303,11 +303,11 @@ MonoBehaviour:
       Entry: 3
       Data: 0
     - Name: label
-      Entry: 1
-      Data: f
+      Entry: 6
+      Data: 
     - Name: increment
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
