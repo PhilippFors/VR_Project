@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Dragging : MonoBehaviour
 {
-    public Transform DragHelper;
-    public Vector3 ogPos;
+    [HideInInspector] public Vector3 ogPos;
+    [HideInInspector] public Quaternion ogRot;
     public Camera cam;
     Ray ray;
 
@@ -13,13 +13,14 @@ public class Dragging : MonoBehaviour
     public float maxDistance = 5f;
     public float floatSpeed = 0.5f;
 
-    public bool onSurface = false;
-    public void Drag(GameObject obj)
+    [HideInInspector] public bool onSurface = false;
+
+    public void Drag(GameObject obj, Rigidbody rb)
     {
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
         rb.useGravity = false;
-        rb.velocity = Vector3.zero;
+
         Vector3 newPos = Vector3.zero;
+
         RaycastHit hit;
         ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out hit, maxDistance, LayerMask.GetMask("Surface")))
@@ -32,14 +33,13 @@ public class Dragging : MonoBehaviour
             newPos = cam.transform.position + cam.transform.forward * minDistance;
             onSurface = false;
         }
-        DragHelper.position = newPos;
         obj.transform.rotation = Quaternion.Euler(0, 0, 0);
         obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, Time.deltaTime * floatSpeed);
     }
 
-    public void StopDrag(GameObject obj)
+    public void StopDrag(Rigidbody rb)
     {
-        obj.GetComponent<Rigidbody>().useGravity = true;
+        rb.useGravity = true;
     }
 
 

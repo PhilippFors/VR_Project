@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class InteractableTEst : Interactable
 {
-    public override void DragAction()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void HoldAction()
     {
         Debug.Log("I am " + gameObject.name);
         gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
-    public override void StopHold(){
+    public override void StopHold()
+    {
         gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
     }
 
@@ -33,4 +29,6 @@ public class InteractableTEst : Interactable
     {
         gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
     }
+
+
 }

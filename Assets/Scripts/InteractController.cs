@@ -15,28 +15,30 @@ public class InteractController : MonoBehaviour
 
     bool isHovering = false;
     bool isHolding = false;
-    bool canDrag = false;
+
     void Update()
     {
         FindObject();
 
-        HoldSim();
+        HoldSimulation();
 
         CheckForHoldAction();
     }
 
-    void HoldSim()
+
+    //Used for Debugging in the Editor
+    void HoldSimulation()
     {
         RaycastHit hit;
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.SphereCast(ray, 0.1f, out hit))
+        if (Physics.SphereCast(ray, 0.1f, out hit) & !isHolding)
         {
             if (hit.transform.gameObject.GetComponent<Interactable>() != null)
             {
                 touchtime += Time.deltaTime;
                 if (touchtime >= minholdtime)
                 {
-                    if (iObject != null & !isHolding)
+                    if (iObject != null)
                     {
                         isHolding = true;
                         iObject = hit.transform.GetComponent<Interactable>();
@@ -44,8 +46,12 @@ public class InteractController : MonoBehaviour
                 }
             }
         }
+
         if (isHolding)
+        {
+            iObject.DragAction();
             iObject.HoldAction();
+        }
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -53,26 +59,14 @@ public class InteractController : MonoBehaviour
             if (isHolding)
                 if (iObject != null)
                 {
-                    isHolding = false;
+                    iObject.StopDrag();
                     iObject.StopHold();
+                    isHolding = false;
                 }
         }
     }
 
-
-    void CheckForClick()
-    {
-        if (Input.touchCount > 0)
-        {
-            touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-            {
-                //if (iObject != null)
-                //iObject.PointerClick();
-            }
-        }
-    }
-
+    //Works only on mobild build
     public void CheckForHoldAction()
     {
         if (Input.touchCount > 0)
@@ -85,8 +79,13 @@ public class InteractController : MonoBehaviour
                 {
                     if (iObject != null)
                     {
-                        isHolding = true;
+
+                        iObject.DragAction();
+
                         iObject.HoldAction();
+
+                        isHolding = true;
+
                     }
 
                 }
@@ -97,13 +96,17 @@ public class InteractController : MonoBehaviour
                 if (isHolding)
                     if (iObject != null)
                     {
-                        isHolding = false;
+                        iObject.StopDrag();
+
                         iObject.StopHold();
+
+                        isHolding = false;
                     }
             }
         }
     }
 
+    //Sends a Raycast and looks for an Object with the 'Interactable' component on it to save it into a variable
     void FindObject()
     {
         RaycastHit hit;
@@ -150,14 +153,6 @@ public class InteractController : MonoBehaviour
             }
         }
 
-
-
-        if (obj != null & !canDrag)
-        {
-            DragHelper.position = obj.transform.position;
-            DragHelper.parent = cam.transform;
-            DragHelper.rotation = Quaternion.Euler(0, 0, 0);
-        }
     }
 
 }
