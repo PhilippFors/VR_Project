@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+public abstract class Interactable : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool draggable;
+    public abstract void HoldAction();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void StopHold();
+
+    public abstract void DragAction();
+
+    public abstract void PointerEnter();
+
+    public abstract void PointerExit();
+
+    public abstract void PointerClick();
 }
