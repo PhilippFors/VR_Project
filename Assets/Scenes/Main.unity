@@ -162,7 +162,6 @@ GameObject:
   - component: {fileID: 120786056}
   - component: {fileID: 120786058}
   - component: {fileID: 120786057}
-  - component: {fileID: 120786059}
   - component: {fileID: 120786060}
   m_Layer: 0
   m_Name: Main Camera
@@ -237,21 +236,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &120786059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120786055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b687d41d19504c4f95afb40bf999537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DragHelper: {fileID: 0}
-  cam: {fileID: 120786058}
-  touchtime: 0
 --- !u!114 &120786060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,6 +410,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &301883539
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 301883540}
+  - component: {fileID: 301883541}
+  m_Layer: 0
+  m_Name: InteractionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &301883540
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301883539}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2069144186}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &301883541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301883539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b687d41d19504c4f95afb40bf999537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 120786058}
+  minholdtime: 0.5
 --- !u!1 &416609459
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,7 +681,7 @@ GameObject:
   - component: {fileID: 739913448}
   - component: {fileID: 739913444}
   - component: {fileID: 739913449}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DragCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -744,6 +773,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34db9e7d789fdbb41b1e33f0ba42d4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ogPos: {x: 0, y: 0, z: 0}
+  ogRot: {x: 0, y: 0, z: 0, w: 0}
   draggable: 1
   dragger: {fileID: 1465332042}
 --- !u!54 &739913449
@@ -774,6 +805,8 @@ GameObject:
   - component: {fileID: 745237874}
   - component: {fileID: 745237873}
   - component: {fileID: 745237872}
+  - component: {fileID: 745237877}
+  - component: {fileID: 745237876}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -855,6 +888,31 @@ Transform:
   m_Father: {fileID: 1461891798}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &745237876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745237871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c049a54faf0bb6c48bc0f0bb964820e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &745237877
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745237871}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 0.44752693, z: 10}
+  m_Center: {x: 0, y: 0.07608318, z: 0}
 --- !u!1 &980078135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,8 +1097,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13161a3e1c9cf9f4da87bd739544f066, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ogPos: {x: 0, y: 0, z: 0}
-  ogRot: {x: 0, y: 0, z: 0, w: 0}
   cam: {fileID: 120786058}
   minDistance: 1.5
   maxDistance: 7
@@ -1074,7 +1130,7 @@ GameObject:
   - component: {fileID: 1960631150}
   - component: {fileID: 1960631154}
   - component: {fileID: 1960631155}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1166,6 +1222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6c0beccc369984b958ae343fcd4ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ogPos: {x: 0, y: 0, z: 0}
+  ogRot: {x: 0, y: 0, z: 0, w: 0}
   draggable: 0
   dragger: {fileID: 1465332042}
 --- !u!114 &1960631155
@@ -1209,6 +1267,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1465332043}
+  - {fileID: 301883540}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

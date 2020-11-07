@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Dragging : MonoBehaviour
 {
-    [HideInInspector] public Vector3 ogPos;
-    [HideInInspector] public Quaternion ogRot;
     public Camera cam;
     Ray ray;
 
@@ -17,6 +15,7 @@ public class Dragging : MonoBehaviour
 
     public void Drag(GameObject obj, Rigidbody rb)
     {
+        
         rb.useGravity = false;
 
         Vector3 newPos = Vector3.zero;
@@ -39,10 +38,9 @@ public class Dragging : MonoBehaviour
 
     public void StopDrag(Rigidbody rb)
     {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         rb.useGravity = true;
     }
-
-
-
 
 }

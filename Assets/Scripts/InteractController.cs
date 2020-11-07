@@ -5,12 +5,11 @@ using UnityEngine;
 public class InteractController : MonoBehaviour
 {
     Ray ray;
-    public Transform DragHelper;
     Interactable iObject;
     Interactable oldObj;
     [SerializeField] Camera cam;
-    public float touchtime;
-    float minholdtime = 1f;
+    float touchtime;
+    public float minholdtime = 1f;
     Touch touch;
 
     bool isHovering = false;
@@ -112,7 +111,7 @@ public class InteractController : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         GameObject obj = null;
-        if (Physics.SphereCast(ray, 0.2f, out hit))
+        if (Physics.SphereCast(ray, 0.1f, out hit))
         {
             if (hit.transform.gameObject.GetComponent<Interactable>() != null)
             {
@@ -136,7 +135,6 @@ public class InteractController : MonoBehaviour
                     oldObj = iObject;
                     isHovering = false;
                     iObject = null;
-                    DragHelper.parent = null;
                 }
             }
         }
@@ -149,7 +147,6 @@ public class InteractController : MonoBehaviour
                 oldObj = iObject;
                 isHovering = false;
                 iObject = null;
-                DragHelper.parent = null;
             }
         }
 

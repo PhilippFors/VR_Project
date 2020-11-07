@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
+    [HideInInspector] public Vector3 ogPos;
+    [HideInInspector] public Quaternion ogRot;
     Rigidbody rb => GetComponent<Rigidbody>();
     bool reset;
     public bool draggable;
@@ -28,6 +30,18 @@ public abstract class Interactable : MonoBehaviour
             {
                 StartCoroutine(ResetDrag());
             }
+            else
+            {
+                Ray ray = new Ray(rb.gameObject.transform.position, Vector3.down);
+                if (Physics.SphereCast(ray, 0.4f, 1f, LayerMask.GetMask("Interactable")))
+                {
+                    StartCoroutine(ResetDrag());
+                }
+                else
+                {
+                    dragger.StopDrag(rb);
+                }
+            }
     }
 
     public abstract void PointerEnter();
@@ -36,16 +50,24 @@ public abstract class Interactable : MonoBehaviour
 
     public abstract void PointerClick();
 
-    IEnumerator ResetDrag()
+    public IEnumerator ResetDrag()
     {
-        while (transform.position != dragger.ogPos)
+        bool reset = false;
+        while (!reset)
         {
-            transform.position = Vector3.Lerp(transform.position, dragger.ogPos, Time.deltaTime * dragger.floatSpeed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, dragger.ogRot, Time.deltaTime * dragger.floatSpeed);
-
+            transform.position = Vector3.Lerp(transform.position, ogPos, Time.deltaTime * dragger.floatSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, ogRot, Time.deltaTime * dragger.floatSpeed);
+            if (transform.position == ogPos)
+                reset = true;
             yield return null;
         }
 
         dragger.StopDrag(rb);
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = ogPos;
+        transform.rotation = ogRot;
     }
 }
