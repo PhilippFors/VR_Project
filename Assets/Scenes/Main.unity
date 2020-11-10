@@ -773,10 +773,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34db9e7d789fdbb41b1e33f0ba42d4b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ogPos: {x: 0, y: 0, z: 0}
-  ogRot: {x: 0, y: 0, z: 0, w: 0}
-  draggable: 1
-  dragger: {fileID: 1465332042}
+  clickable: 0
+  holdable: 0
+  lookable: 0
+  draggable: 0
+  clickStressValue: 2.67
+  holdStressValue: 0
+  lookStressValue: 0
+  dragStressValue: 0
+  clickCompletionValue: 0
+  holdCompletionValue: 0
+  lookCompletionValue: 0
+  dragCompletionValue: 0
+  currentTaskCompletionValue: 0
+  maxTaskCompletionValue: 0
+  lastPos: {x: 0, y: 0, z: 0}
+  lastRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!54 &739913449
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1037,6 +1049,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1266628593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1266628594}
+  - component: {fileID: 1266628595}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1266628594
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266628593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2069144186}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1266628595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1266628593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93a50333ae343449b05e1437ce82279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStress: 0
+  maxStress: 100
 --- !u!1 &1461891797
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,8 +1185,8 @@ GameObject:
   - component: {fileID: 1960631152}
   - component: {fileID: 1960631151}
   - component: {fileID: 1960631150}
-  - component: {fileID: 1960631154}
   - component: {fileID: 1960631155}
+  - component: {fileID: 1960631154}
   m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
@@ -1219,13 +1276,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1960631149}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de6c0beccc369984b958ae343fcd4ae7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d3754a7ca130734cbaf76cb0f92df39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ogPos: {x: 0, y: 0, z: 0}
-  ogRot: {x: 0, y: 0, z: 0, w: 0}
+  clickable: 1
+  holdable: 1
+  lookable: 0
   draggable: 0
-  dragger: {fileID: 1465332042}
+  clickStressValue: 1
+  holdStressValue: 1
+  lookStressValue: 1
+  dragStressValue: 0
+  clickCompletionValue: 1
+  holdCompletionValue: 1
+  lookCompletionValue: 1
+  dragCompletionValue: 0
+  currentTaskCompletionValue: 0
+  maxTaskCompletionValue: 0
+  lastPos: {x: 0, y: 0, z: 0}
+  lastRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1960631155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1268,6 +1337,7 @@ Transform:
   m_Children:
   - {fileID: 1465332043}
   - {fileID: 301883540}
+  - {fileID: 1266628594}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

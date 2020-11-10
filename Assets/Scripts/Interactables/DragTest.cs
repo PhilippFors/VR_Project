@@ -16,8 +16,8 @@ public class DragTest : Interactable
 
     public override void PointerEnter()
     {
-        ogPos = transform.position;
-        ogRot = transform.rotation;
+        lastPos = transform.position;
+        lastRot = transform.rotation;
     }
 
     public override void PointerExit()
