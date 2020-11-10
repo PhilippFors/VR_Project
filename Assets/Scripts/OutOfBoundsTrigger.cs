@@ -4,7 +4,7 @@ public class OutOfBoundsTrigger : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Interactable>())
-            other.GetComponent<Interactable>().ResetOgPosition();
+        if (other.GetComponent<JobTask>())
+            other.GetComponent<JobTask>().ResetOgPosition();
     }
 }

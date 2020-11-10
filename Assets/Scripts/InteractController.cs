@@ -32,7 +32,7 @@ public class InteractController : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.SphereCast(ray, 0.1f, out hit) & !isHolding)
         {
-            if (hit.transform.gameObject.GetComponent<Interactable>() != null)
+            if (hit.transform.gameObject.GetComponent<JobTask>() != null)
             {
                 touchtime += Time.deltaTime;
                 if (touchtime >= minholdtime)
@@ -40,7 +40,7 @@ public class InteractController : MonoBehaviour
                     if (iObject != null)
                     {
                         isHolding = true;
-                        iObject = hit.transform.GetComponent<Interactable>();
+                        iObject = hit.transform.GetComponent<JobTask>();
                     }
                 }
             }
@@ -113,11 +113,11 @@ public class InteractController : MonoBehaviour
         GameObject obj = null;
         if (Physics.SphereCast(ray, 0.1f, out hit))
         {
-            if (hit.transform.gameObject.GetComponent<Interactable>() != null)
+            if (hit.transform.gameObject.GetComponent<JobTask>() != null)
             {
                 if (iObject == null)
                 {
-                    iObject = hit.transform.gameObject.GetComponent<Interactable>();
+                    iObject = hit.transform.gameObject.GetComponent<JobTask>();
                     obj = hit.transform.gameObject;
                 }
                 if (iObject != null & !isHovering & !isHolding)

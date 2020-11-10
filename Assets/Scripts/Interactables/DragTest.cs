@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragTest : Interactable
+public class DragTest : JobTask
 {
     public override void HoldAction()
     {

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Interactable), true)]
+[CustomEditor(typeof(JobTask), true)]
 public class InteractableEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        Interactable script = (Interactable)target;
+        JobTask script = (JobTask)target;
 
         script.clickable = EditorGUILayout.Toggle("Clickable", script.clickable);
         if (script.clickable)

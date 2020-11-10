@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableTEst : Interactable
+public class InteractableTEst : JobTask
 {
     public override void HoldAction()
     {
@@ -13,6 +13,7 @@ public class InteractableTEst : Interactable
 
     public override void StopHold()
     {
+        base.StopHold();
         gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
     }
 
