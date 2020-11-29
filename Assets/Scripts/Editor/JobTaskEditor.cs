@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(JobTask), true)]
-public class InteractableEditor : Editor
+public class JobTaskEditor : Editor
 {
     public override void OnInspectorGUI()
     {

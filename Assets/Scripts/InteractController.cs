@@ -5,15 +5,20 @@ using UnityEngine;
 public class InteractController : MonoBehaviour
 {
     Ray ray;
-    Interactable iObject;
-    Interactable oldObj;
+    IInteractable interactionObj;
+    IInteractable oldObj;
     [SerializeField] Camera cam;
+    [SerializeField] DragController dragger;
+
     float touchtime;
-    public float minholdtime = 1f;
+    [SerializeField] float minholdtime = 0.5f;
+    [SerializeField] float minForDragTime = 0.2f;
+
     Touch touch;
 
     bool isHovering = false;
     bool isHolding = false;
+    bool isDragging = false;
 
     void Update()
     {
@@ -21,136 +26,200 @@ public class InteractController : MonoBehaviour
 
         HoldSimulation();
 
-        CheckForHoldAction();
-    }
+        // CheckForHoldAction();
 
+        // DragInteraction();
+    }
 
     //Used for Debugging in the Editor
     void HoldSimulation()
     {
         RaycastHit hit;
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.SphereCast(ray, 0.1f, out hit) & !isHolding)
+        if (Physics.Raycast(ray, out hit) & !isHolding & !isDragging)
         {
             if (hit.transform.gameObject.GetComponent<JobTask>() != null)
             {
                 touchtime += Time.deltaTime;
                 if (touchtime >= minholdtime)
                 {
-                    if (iObject != null)
-                    {
+                    interactionObj = hit.transform.GetComponent<JobTask>();
+
+                    if (interactionObj.draggable)
+                        isDragging = true;
+                    if (interactionObj.holdable)
                         isHolding = true;
-                        iObject = hit.transform.GetComponent<JobTask>();
-                    }
                 }
             }
         }
 
         if (isHolding)
-        {
-            iObject.DragAction();
-            iObject.HoldAction();
-        }
+            interactionObj.HoldAction();
+
+        if (isDragging)
+            Dragging();
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             touchtime = 0;
             if (isHolding)
-                if (iObject != null)
+                if (interactionObj != null)
                 {
-                    iObject.StopDrag();
-                    iObject.StopHold();
+                    if (interactionObj.holdable)
+                        interactionObj.StopHold();
+
                     isHolding = false;
                 }
+
+            if (isDragging)
+                if (interactionObj.draggable)
+                    StopDragging();
         }
     }
 
-    //Works only on mobild build
-    public void CheckForHoldAction()
+    //Works only on mobile build
+    void CheckForHoldAction()
     {
-        if (Input.touchCount > 0)
+        if (interactionObj != null && interactionObj.holdable)
         {
-            touch = Input.GetTouch(0);
-            if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+            if (Input.touchCount > 0)
             {
-                touchtime += Time.deltaTime;
-                if (touchtime >= minholdtime)
+                touch = Input.GetTouch(0);
+                if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
                 {
-                    if (iObject != null)
+                    touchtime += Time.deltaTime;
+                    if (touchtime >= minholdtime)
                     {
-
-                        iObject.DragAction();
-
-                        iObject.HoldAction();
+                        interactionObj.HoldAction();
 
                         isHolding = true;
-
                     }
-
                 }
             }
             else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
             {
                 touchtime = 0;
                 if (isHolding)
-                    if (iObject != null)
-                    {
-                        iObject.StopDrag();
+                {
+                    interactionObj.StopHold();
 
-                        iObject.StopHold();
-
-                        isHolding = false;
-                    }
+                    isHolding = false;
+                }
             }
         }
     }
+
+    #region Drag Interaction
+    void DragInteraction()
+    {
+        if (interactionObj != null && interactionObj.draggable)
+        {
+            if (Input.touchCount > 0)
+            {
+                touch = Input.GetTouch(0);
+                if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+                {
+                    touchtime += Time.deltaTime;
+                    if (touchtime >= minForDragTime)
+                    {
+                        Dragging();
+                    }
+
+                }
+                else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    touchtime = 0;
+                    if (isDragging)
+                    {
+                        StopDragging();
+                    }
+                }
+            }
+        }
+    }
+
+    void Dragging()
+    {
+        if (!interactionObj.GetComponent<Draggable>().active)
+        {
+            dragger.Drag(interactionObj.gameObject, interactionObj.rb);
+            isDragging = true;
+        }
+    }
+
+    void StopDragging()
+    {
+        if (dragger.onDestination)
+        {
+            if (!dragger.currentDest.active && dragger.currentDest.pairObj.name.Equals(interactionObj.name))
+            {
+                dragger.StopDrag(interactionObj.rb);
+                interactionObj.transform.position = dragger.currentDest.snapPosition;
+                interactionObj.transform.rotation = dragger.currentDest.snapRot;
+                interactionObj.DragAction();
+                dragger.currentDest.WaitForCompletionStart();
+                dragger.currentDest = null;
+            }
+        }
+        else if (dragger.onSurface)
+        {
+            dragger.StopDrag(interactionObj.rb);
+        }
+        else if (!dragger.onSurface & !dragger.onDestination)
+        {
+            dragger.StartPositionReset(interactionObj);
+        }
+
+        isDragging = false;
+    }
+
+    #endregion
 
     //Sends a Raycast and looks for an Object with the 'Interactable' component on it to save it into a variable
     void FindObject()
     {
         RaycastHit hit;
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        GameObject obj = null;
-        if (Physics.SphereCast(ray, 0.1f, out hit))
+        if (Physics.Raycast(ray, out hit) & !isHolding & !isDragging)
         {
-            if (hit.transform.gameObject.GetComponent<JobTask>() != null)
+            var inter = hit.transform.gameObject.GetComponent<IInteractable>();
+            if (inter != null)
             {
-                if (iObject == null)
+                if (interactionObj == null)
                 {
-                    iObject = hit.transform.gameObject.GetComponent<JobTask>();
-                    obj = hit.transform.gameObject;
-                }
-                if (iObject != null & !isHovering & !isHolding)
-                {
-                    iObject.PointerEnter();
-                    isHovering = true;
+                    interactionObj = inter;
+                    if (!isHovering & !isHolding & !isDragging)
+                    {
+                        interactionObj.PointerEnter();
+                        isHovering = true;
+                    }
                 }
             }
             else
             {
-                if (!isHolding)
+                if (!isHolding & !isDragging)
                 {
-                    if (iObject != null)
-                        iObject.PointerExit();
-                    oldObj = iObject;
+                    if (interactionObj != null)
+                        interactionObj.PointerExit();
+
+                    oldObj = interactionObj;
                     isHovering = false;
-                    iObject = null;
+                    interactionObj = null;
                 }
             }
         }
         else
         {
-            if (!isHolding)
+            if (!isHolding & !isDragging)
             {
-                if (iObject != null)
-                    iObject.PointerExit();
-                oldObj = iObject;
+                if (interactionObj != null)
+                    interactionObj.PointerExit();
+
+                oldObj = interactionObj;
                 isHovering = false;
-                iObject = null;
+                interactionObj = null;
             }
         }
-
     }
-
 }
 

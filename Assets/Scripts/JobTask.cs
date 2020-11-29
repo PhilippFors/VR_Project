@@ -2,157 +2,131 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class JobTask : MonoBehaviour, Interactable
+public abstract class JobTask : IInteractable
 {
-    [HideInInspector] public bool clickable, holdable, lookable, draggable;
     [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue;
     [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue;
+
     public float currentTaskCompletionValue;
-    public float maxTaskCompletionValue;
-    public float completionReductionValue;
-    [HideInInspector] public Vector3 lastPos;
-    [HideInInspector] public Vector3 ogPos => gameObject.transform.position;
-    [HideInInspector] public Quaternion lastRot;
-    [HideInInspector] public Quaternion ogRot => gameObject.transform.rotation;
-    public Dragging dragger => FindObjectOfType<Dragging>();
-    Rigidbody rb => GetComponent<Rigidbody>();
+    [SerializeField] float maxTaskCompletionValue = 100f;
+    [SerializeField] float completionReductionValue;
+
+    [SerializeField] float waitForReduction = 2f;
     bool reset;
     bool lookedAt;
     Coroutine coroutine;
 
+    private void Start()
+    {
+        ogPos = gameObject.transform.position;
+        ogRot = gameObject.transform.rotation;
+    }
+    
     void Update()
     {
         if (lookedAt)
             AddCompletionOverTime(lookCompletionValue);
     }
 
-    public virtual void HoldAction()
+    public override void HoldAction()
     {
         if (!holdable)
             return;
         else
         {
-            HoldStress();
+            AddStressOverTime(holdStressValue);
             AddCompletionOverTime(holdCompletionValue);
-            StopCountdown();
+            StopTaskReduction();
         }
     }
 
-    public virtual void StopHold()
+    public override void StopHold()
     {
-        StartCountdown();
+        StartTaskReduction();
     }
 
-    public virtual void DragAction()
+    public override void DragAction()
     {
-        if (draggable)
+        if (!draggable)
+            return;
+        else
         {
-            reset = false;
-            dragger.Drag(gameObject, rb);
+            AddStressOnce(dragStressValue);
+            AddCompletionOnce(dragCompletionValue);
+            RestartTaskReduction();
         }
     }
 
-    public virtual void StopDrag()
+    public override void StopDragAction()
     {
-        if (draggable)
-            if (!dragger.onSurface)
-            {
-                StartCoroutine(SmoothPositionReset());
-            }
-            else
-            {
-                Ray ray = new Ray(rb.gameObject.transform.position, Vector3.down);
-                if (Physics.SphereCast(ray, 0.4f, 1f, LayerMask.GetMask("Interactable")))
-                {
-                    StartCoroutine(SmoothPositionReset());
-                }
-                else
-                {
-                    dragger.StopDrag(rb);
-                }
-            }
+
     }
 
-    public virtual void PointerEnter()
+    public override void PointerEnter()
+    {
+        lastPos = transform.position;
+        lastRot = transform.rotation;
+
+        if (!lookable)
+            return;
+        else
+        {
+            AddStressOverTime(lookStressValue);
+            lookedAt = true;
+            StopTaskReduction();
+        }
+    }
+
+    public override void PointerExit()
     {
         if (!lookable)
             return;
         else
         {
-            LookStress();
-            lookedAt = true;
-            StopCountdown();
+            lookedAt = false;
+            StartTaskReduction();
         }
     }
 
-    public virtual void PointerExit()
-    {
-        lookedAt = false;
-        StartCountdown();
-    }
-
-    public virtual void PointerClick()
+    public override void PointerClick()
     {
         if (!clickable)
             return;
         else
         {
-            ClickStress();
+            AddStressOnce(clickStressValue);
             AddCompletionOnce(clickCompletionValue);
-            RestartCountdown();
+            RestartTaskReduction();
         }
     }
 
     #region stress Adders
 
-    void ClickStress()
+    void AddStressOnce(float stress)
     {
-        StressManager.instance.AddStress(clickStressValue);
+        StressManager.instance.AddStress(stress);
     }
 
-    void HoldStress()
+    void AddStressOverTime(float stress)
     {
-        StressManager.instance.AddStress(holdStressValue * Time.deltaTime);
+        StressManager.instance.AddStress(stress * Time.deltaTime);
     }
 
-    void LookStress()
-    {
-        StressManager.instance.AddStress(lookStressValue * Time.deltaTime);
-    }
-
-    void DragStress()
-    {
-        StressManager.instance.AddStress(dragStressValue);
-    }
     #endregion
-
-    public IEnumerator SmoothPositionReset()
-    {
-        bool reset = false;
-        while (!reset)
-        {
-            transform.position = Vector3.Lerp(transform.position, lastPos, Time.deltaTime * dragger.floatSpeed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lastRot, Time.deltaTime * dragger.floatSpeed);
-            if (transform.position == lastPos)
-                reset = true;
-            yield return null;
-        }
-
-        dragger.StopDrag(rb);
-    }
 
     public void ResetLastPosition()
     {
         transform.position = lastPos;
         transform.rotation = lastRot;
     }
+
     public void ResetOgPosition()
     {
         transform.position = ogPos;
         transform.rotation = ogRot;
     }
 
-    void AddCompletionOnce(float value)
+    protected void AddCompletionOnce(float value)
     {
         if (currentTaskCompletionValue + value > maxTaskCompletionValue)
             currentTaskCompletionValue = maxTaskCompletionValue;
@@ -160,7 +134,7 @@ public abstract class JobTask : MonoBehaviour, Interactable
             currentTaskCompletionValue += value;
     }
 
-    void AddCompletionOverTime(float value)
+    protected void AddCompletionOverTime(float value)
     {
         if (currentTaskCompletionValue + value * Time.deltaTime > maxTaskCompletionValue)
             currentTaskCompletionValue = maxTaskCompletionValue;
@@ -168,28 +142,31 @@ public abstract class JobTask : MonoBehaviour, Interactable
             currentTaskCompletionValue += value * Time.deltaTime;
     }
 
-    void StopCountdown()
+    protected void StopTaskReduction()
     {
         if (coroutine != null)
             StopCoroutine(coroutine);
     }
 
-    void StartCountdown()
+    protected void StartTaskReduction()
     {
         coroutine = StartCoroutine(TaskCompletionCountdown());
     }
 
-    void RestartCountdown()
+    protected void RestartTaskReduction()
     {
-        StopCountdown();
+        StopTaskReduction();
 
-        StartCountdown();
+        StartTaskReduction();
     }
-    
-    IEnumerator TaskCompletionCountdown()
+
+    protected IEnumerator TaskCompletionCountdown()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(waitForReduction);
         while (currentTaskCompletionValue >= 0)
+        {
             currentTaskCompletionValue -= completionReductionValue * Time.deltaTime;
+            yield return null;
+        }
     }
 }

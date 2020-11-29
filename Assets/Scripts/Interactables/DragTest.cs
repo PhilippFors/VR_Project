@@ -16,13 +16,12 @@ public class DragTest : JobTask
 
     public override void PointerEnter()
     {
-        lastPos = transform.position;
-        lastRot = transform.rotation;
+        return;
     }
 
     public override void PointerExit()
     {
-
+        return;
     }
 
 

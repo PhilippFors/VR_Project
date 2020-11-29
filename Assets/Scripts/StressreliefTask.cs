@@ -2,54 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StressreliefTask : MonoBehaviour, Interactable
+public class StressreliefTask : IInteractable
 {
-    [HideInInspector] public bool clickable, holdable, lookable, draggable;
-    [HideInInspector] public Vector3 ogPos => gameObject.transform.position;
-    [HideInInspector] public Quaternion ogRot => gameObject.transform.rotation;
-    public float stressReductionValue;
+    [SerializeField] float stressReductionValue;
 
-    public void DragAction()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void HoldAction()
+    public override void HoldAction()
     {
         if (!holdable)
             return;
         else
-            StressManager.instance.RelieveStress(stressReductionValue * Time.deltaTime);
+            RelievStressOverTime();
     }
 
-    public void PointerClick()
+    public override void PointerClick()
     {
-        throw new System.NotImplementedException();
+        if (!clickable)
+            return;
+        else
+            RelieveStressOnce();
     }
 
-    public void PointerEnter()
+    protected void RelieveStressOnce()
     {
-        throw new System.NotImplementedException();
+        StressManager.instance.RelieveStress(stressReductionValue);
     }
 
-    public void PointerExit()
+    protected void RelievStressOverTime()
     {
-        throw new System.NotImplementedException();
-    }
-
-    public void StopDrag()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void StopHold()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        StressManager.instance.RelieveStress(stressReductionValue * Time.deltaTime);
     }
 }
