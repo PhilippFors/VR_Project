@@ -7,6 +7,7 @@ public class Draggable : JobTask
 {
     public DragDestination destination;
     public Coroutine currentCoroutine;
+    public Vector3 velocity;
     public override void DragAction()
     {
         base.DragAction();

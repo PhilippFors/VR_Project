@@ -12,6 +12,8 @@ public class InteractController : MonoBehaviour
     [SerializeField] float minholdtime = 0.5f;
     [SerializeField] float minForDragTime = 0.2f;
 
+    [Header("Throw settings")]
+    [SerializeField] float throwImpulse = 3f;
     Touch touch;
     float touchtime;
 
@@ -24,6 +26,8 @@ public class InteractController : MonoBehaviour
         FindObject();
 
         HoldSimulation();
+
+        // ThrowInteraction();
 
         // CheckForHoldAction();
 
@@ -44,7 +48,7 @@ public class InteractController : MonoBehaviour
                 touchtime += Time.deltaTime;
                 if (touchtime >= minholdtime)
                 {
-                    if (interactionObj.draggable & !interactionObj.active)
+                    if (interactionObj.draggable | interactionObj.throwable & !interactionObj.active)
                         isDragging = true;
 
                     if (interactionObj.holdable)
@@ -56,8 +60,11 @@ public class InteractController : MonoBehaviour
         if (isHolding)
             interactionObj.HoldAction();
 
-        if (isDragging)
+        if (isDragging && interactionObj.draggable)
             Dragging();
+
+        if (isDragging && interactionObj.throwable)
+            PickUp();
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -70,10 +77,14 @@ public class InteractController : MonoBehaviour
 
                     isHolding = false;
                 }
-                
+
             if (isDragging)
+            {
                 if (interactionObj.draggable)
                     StopDragging();
+                if (interactionObj.throwable)
+                    LetGo();
+            }
         }
     }
 
@@ -109,6 +120,59 @@ public class InteractController : MonoBehaviour
         }
     }
 
+    #region Throw Interaction
+
+    void ThrowInteraction()
+    {
+        if (interactionObj != null && interactionObj.throwable)
+        {
+            if (Input.touchCount > 0)
+            {
+                touch = Input.GetTouch(0);
+                if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+                {
+                    touchtime += Time.deltaTime;
+                    if (touchtime >= minForDragTime)
+                    {
+                        PickUp();
+                    }
+                }
+                else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    touchtime = 0;
+                    if (isDragging)
+                    {
+                        LetGo();
+                    }
+                }
+            }
+        }
+    }
+
+    void PickUp()
+    {
+        if (!interactionObj.GetComponent<Draggable>().active)
+        {
+            dragger.Drag(interactionObj, interactionObj.rb, true);
+            isDragging = true;
+        }
+    }
+
+    void LetGo()
+    {
+        interactionObj.rb.useGravity = true;
+
+        Vector3 vel = interactionObj.GetComponent<Draggable>().velocity;
+        Vector3 velNormal = vel.normalized;
+        interactionObj.rb.AddForce(velNormal * throwImpulse * vel.magnitude, ForceMode.Impulse);
+        interactionObj.rb.angularVelocity = new Vector3(Random.Range(10f, 200f) * vel.magnitude, Random.Range(10f, 200) * vel.magnitude, Random.Range(10f, 200) * vel.magnitude);
+        // interactionObj.rb.velocity = vel;
+        interactionObj.ThrowAction();
+        isDragging = false;
+    }
+
+    #endregion
+
     #region Drag Interaction
     void DragInteraction()
     {
@@ -141,7 +205,7 @@ public class InteractController : MonoBehaviour
     {
         if (!interactionObj.GetComponent<Draggable>().active)
         {
-            dragger.Drag(interactionObj.gameObject, interactionObj.rb);
+            dragger.Drag(interactionObj, interactionObj.rb, false);
             isDragging = true;
         }
     }
@@ -154,6 +218,8 @@ public class InteractController : MonoBehaviour
         {
             if (!dragger.currentDest.active && dragger.currentDest.pairObj.name.Equals(interactionObj.name))
             {
+                interactionObj.transform.position = dragger.currentDest.snapPosition;
+                interactionObj.transform.rotation = dragger.currentDest.snapRot;
                 dragger.StopDrag(interactionObj.rb);
                 interactionObj.DragAction();
                 dragger.currentDest.WaitForCompletionStart();

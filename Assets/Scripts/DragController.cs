@@ -6,12 +6,15 @@ public class DragController : MonoBehaviour
 {
     [SerializeField] Camera cam;
     public DragDestination currentDest;
+    public Transform helper;
     Ray ray;
     [SerializeField] float minDistance = 2f;
     public float maxDistance = 5f;
-    public float floatSpeed = 9f;
+    public float floatSpeed = 6f;
     public bool onSurface = false;
     public bool onDestination = false;
+
+    public Vector3 offset = new Vector3(0f, 0.15f, 0f);
     LayerMask surfaceMask => LayerMask.GetMask("Surface");
     LayerMask destinationMask => LayerMask.GetMask("Drag Destination");
     public LayerMask defaultMask;
@@ -19,24 +22,56 @@ public class DragController : MonoBehaviour
     Quaternion newRot;
     RaycastHit hit;
 
-    public void Drag(GameObject obj, Rigidbody rb)
+    Vector3 oldPos;
+
+    public void Drag(IInteractable obj, Rigidbody rb, bool throwable)
     {
-        rb.useGravity = false;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        if (throwable)
+        {
+            rb.useGravity = false;
+            if (Physics.Raycast(ray, out hit, maxDistance, defaultMask))
+            {
+                if (hit.transform.gameObject.tag.Equals("Surface"))
+                {
+                    onSurface = true;
+                }
+                else
+                {
+                    onSurface = false;
+                }
+            }
+            oldPos = newPos;
+            newPos = cam.transform.position + cam.transform.forward * Vector3.Distance(cam.transform.position, obj.lastPos);
+            obj.GetComponent<Draggable>().velocity = newPos - oldPos;
 
-        ray = new Ray(cam.transform.position, cam.transform.forward);
+            Vector3 rot = cam.transform.position - obj.transform.position;
+            obj.transform.rotation = Quaternion.LookRotation(rot);
+            // rb.MovePosition(newPos);
+            onSurface = false;
+        }
 
-        newPos = Vector3.zero;
-        newRot = Quaternion.identity;
+        if (!throwable)
+        {
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
 
-        FindDestination(obj);
+            ray = new Ray(cam.transform.position, cam.transform.forward);
+            oldPos = newPos;
 
-        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, newRot, Time.deltaTime * floatSpeed);
-        obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, Time.deltaTime * floatSpeed);
+            newPos = Vector3.zero;
+            newRot = Quaternion.identity;
+
+            FindDestination(obj);
+
+            obj.GetComponent<Draggable>().velocity = newPos - oldPos;
+        }
+
+        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, newRot, throwable ? Time.deltaTime * (floatSpeed + 5) : Time.deltaTime * floatSpeed);
+        obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, throwable ? Time.deltaTime * (floatSpeed + 5) : Time.deltaTime * floatSpeed);
     }
 
-    void FindDestination(GameObject obj)
+    void FindDestination(IInteractable obj)
     {
         Vector3 pos = Vector3.zero;
         var draggable = obj.GetComponent<Draggable>();
@@ -56,20 +91,28 @@ public class DragController : MonoBehaviour
                     {
                         if (hit.transform.gameObject.tag.Equals("Surface"))
                         {
-                            newPos = hit.point + new Vector3(0, 0.15f, 0);
+                            newPos = hit.point + offset;
                             newRot = obj.GetComponent<IInteractable>().ogRot;
                             onSurface = true;
                         }
                         else
                         {
-                            pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
-                            newPos = pos;
-
-                            Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;
-                            newRot = Quaternion.LookRotation(temp);
+                            // pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
+                            newPos = helper.position;
+                            // Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;
+                            newRot = helper.rotation;
                             onSurface = false;
                         }
                     }
+                }
+                else
+                {
+                    // pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
+                    newPos = helper.position;
+
+                    // Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;
+                    newRot = helper.rotation;
+                    onSurface = false;
                 }
             }
             else
@@ -78,6 +121,12 @@ public class DragController : MonoBehaviour
                 FindNearestPoint(obj);
             }
         }
+        else if (Physics.Raycast(ray, out hit, maxDistance, destinationMask))
+        {
+            currentDest = hit.transform.GetComponent<DragDestination>();
+            newPos = currentDest.snapPosition;
+            newRot = currentDest.snapRot;
+        }
         else
         {
             currentDest = null;
@@ -85,31 +134,51 @@ public class DragController : MonoBehaviour
         }
     }
 
-    void FindNearestPoint(GameObject obj)
+    void FindNearestPoint(IInteractable obj)
     {
         if (Physics.Raycast(ray, out hit, maxDistance, defaultMask))
         {
             if (hit.transform.gameObject.tag.Equals("Surface"))
             {
-                newPos = hit.point + new Vector3(0, 0.15f, 0);
+                RaycastHit check;
+                // if (Physics.SphereCast(obj.transform.position, 1f, Vector3.up, out check, 1f, defaultMask))
+                // {
+                //     GameObject inTheW = check.transform.gameObject;
+                //     if (Vector3.Distance(inTheW.transform.position, hit.point) < 1f)
+                //     {
+                //         Vector3 temp = hit.point - inTheW.transform.position;
+                //         newPos = inTheW.transform.position + temp.normalized * 0.8f + offset;
+                //         newRot = Quaternion.LookRotation(temp);
+                //     }
+                // }
+                // else
+                // {
+                newPos = hit.point + offset;
                 newRot = obj.GetComponent<IInteractable>().ogRot;
                 onSurface = true;
+                // }
             }
             else
             {
-                Vector3 pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
-                newPos = pos;
+                // Vector3 pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
+                // newPos = pos;
 
-                Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;
-                newRot = Quaternion.LookRotation(temp);
+                // Vector3 temp = obj.transform.position - hit.transform.gameObject.transform.position;
+                // newRot = Quaternion.LookRotation(temp);
+                // onSurface = false;
+                // newPos = cam.transform.position + cam.transform.forward * minDistance;
+                newPos = helper.position;
+                // Vector3 rot = cam.transform.position - obj.transform.position;
+                newRot = helper.rotation;
                 onSurface = false;
             }
         }
         else
         {
-            newPos = cam.transform.position + cam.transform.forward * minDistance;
-            Vector3 rot = cam.transform.position - obj.transform.position;
-            newRot = Quaternion.LookRotation(rot);
+            // newPos = cam.transform.position + cam.transform.forward * minDistance;
+            newPos = helper.position;
+            // Vector3 rot = cam.transform.position - obj.transform.position;
+            newRot = helper.rotation;
             onSurface = false;
         }
     }

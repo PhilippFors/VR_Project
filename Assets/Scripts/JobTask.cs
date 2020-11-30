@@ -126,12 +126,16 @@ public abstract class JobTask : IInteractable
 
     public void ResetLastPosition()
     {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         transform.position = lastPos;
         transform.rotation = lastRot;
     }
 
     public void ResetOgPosition()
     {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         transform.position = ogPos;
         transform.rotation = ogRot;
     }
