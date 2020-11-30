@@ -8,15 +8,16 @@ public class DragController : MonoBehaviour
     public DragDestination currentDest;
     Ray ray;
     [SerializeField] float minDistance = 2f;
-    [SerializeField] float maxDistance = 5f;
-    public float floatSpeed = 0.5f;
+    public float maxDistance = 5f;
+    public float floatSpeed = 9f;
     public bool onSurface = false;
     public bool onDestination = false;
     LayerMask surfaceMask => LayerMask.GetMask("Surface");
     LayerMask destinationMask => LayerMask.GetMask("Drag Destination");
+    [SerializeField] LayerMask defaultMask;
     Vector3 newPos;
     Quaternion newRot;
-
+    RaycastHit hit;
 
     public void Drag(GameObject obj, Rigidbody rb)
     {
@@ -29,35 +30,63 @@ public class DragController : MonoBehaviour
         newPos = Vector3.zero;
         newRot = Quaternion.identity;
 
-        RaycastHit hit;
+        FindDestination(obj);
 
-        if (Physics.Raycast(ray, out hit, maxDistance, destinationMask, QueryTriggerInteraction.Collide))
+        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, newRot, Time.deltaTime * floatSpeed);
+        obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, Time.deltaTime * floatSpeed);
+    }
+
+    void FindDestination(GameObject obj)
+    {
+        Vector3 pos = Vector3.zero;
+        var draggable = obj.GetComponent<Draggable>();
+
+        if (draggable.destination != null)
         {
-            currentDest = hit.transform.GetComponent<DragDestination>();
-            if (currentDest != null)
+            currentDest = draggable.destination;
+
+            if (draggable.destination.onDestination)
             {
                 newPos = currentDest.snapPosition;
                 newRot = currentDest.snapRot;
 
-                onDestination = true;
+                if (Physics.Raycast(ray, out hit, maxDistance, defaultMask))
+                {
+                    if (Vector3.Distance(hit.point, currentDest.snapPosition) > 0.5f)
+                    {
+                        if (hit.transform.gameObject.tag.Equals("Surface"))
+                        {
+                            newPos = hit.point + new Vector3(0, 0.15f, 0);
+                            newRot = obj.GetComponent<IInteractable>().ogRot;
+                            onSurface = true;
+                        }
+                        else
+                        {
+                            pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.2f);
+                            newPos = pos;
+
+                            Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;
+                            newRot = Quaternion.LookRotation(temp);
+                            onSurface = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                currentDest = null;
+                FindNearestPoint(obj);
             }
         }
         else
         {
-            onDestination = false;
             FindNearestPoint(obj);
         }
-
-        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, newRot, Time.deltaTime * floatSpeed);
-
-        obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, Time.deltaTime * floatSpeed);
     }
 
     void FindNearestPoint(GameObject obj)
     {
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, maxDistance, LayerMask.GetMask("Default")))
+        if (Physics.Raycast(ray, out hit, maxDistance, defaultMask))
         {
             if (hit.transform.gameObject.tag.Equals("Surface"))
             {
@@ -100,13 +129,7 @@ public class DragController : MonoBehaviour
 
     IEnumerator SmoothPositionReset(IInteractable interactable)
     {
-
-        while (interactable.transform.position != interactable.lastPos && interactable.transform.rotation != interactable.lastRot)
-        {
-            interactable.transform.position = Vector3.Lerp(interactable.transform.position, interactable.lastPos, Time.deltaTime * floatSpeed);
-            interactable.transform.rotation = Quaternion.Lerp(interactable.transform.rotation, interactable.lastRot, Time.deltaTime * floatSpeed);
-            yield return null;
-        }
+        yield return InteractUtilities.instance.StartSmoothPositionChange(interactable, interactable.lastPos, interactable.lastRot);
 
         StopDrag(interactable.rb);
     }

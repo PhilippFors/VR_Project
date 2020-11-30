@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class DragDestination : MonoBehaviour
 {
-    public bool active;
+    public bool active = false;
+    public bool onDestination = false;
     public IInteractable pairObj;
     [SerializeField] Transform snapObj;
     public Vector3 snapPosition => snapObj.transform.position;
     public Quaternion snapRot => snapObj.transform.rotation;
     [SerializeField] float completionTime = 3f;
     [SerializeField] float floatSpeed = 9f;
-
+    Coroutine positionChangeCoroutine;
     private void Start()
     {
-        pairObj.GetComponent<Draggable>().destination = this;
+        // pairObj.GetComponent<Draggable>().destination = this;
     }
 
     public void WaitForCompletionStart()
@@ -27,35 +28,29 @@ public class DragDestination : MonoBehaviour
         active = true;
         yield return new WaitForSeconds(completionTime);
         active = false;
-        StartCoroutine(SmoothPositionChange());
-    }
+        positionChangeCoroutine = InteractUtilities.instance.StartSmoothPositionChange(pairObj, pairObj.ogPos, pairObj.ogRot);
+        pairObj.GetComponent<Draggable>().currentCoroutine = positionChangeCoroutine;
+        yield return positionChangeCoroutine;
 
-    IEnumerator SmoothPositionChange()
-    {
-
-        pairObj.gameObject.GetComponent<Rigidbody>().useGravity = false;
-        pairObj.gameObject.GetComponent<BoxCollider>().enabled = false;
-
-        StartCoroutine(SmoothRotation());
-        
-        while (pairObj.gameObject.transform.position != pairObj.ogPos)
-        {
-            pairObj.gameObject.transform.position = Vector3.Lerp(pairObj.gameObject.transform.position, pairObj.ogPos, Time.deltaTime * floatSpeed);
-            yield return null;
-        }
-
-        pairObj.gameObject.GetComponent<BoxCollider>().enabled = true;
-        pairObj.gameObject.GetComponent<Rigidbody>().useGravity = true;
         pairObj.StopDragAction();
     }
 
-    IEnumerator SmoothRotation()
+    private void OnTriggerEnter(Collider other)
     {
-
-        while (pairObj.gameObject.transform.rotation != pairObj.ogRot)
+        
+        if (other.gameObject.GetComponent<IInteractable>().draggable)
         {
-            pairObj.gameObject.transform.rotation = Quaternion.Lerp(pairObj.gameObject.transform.rotation, pairObj.ogRot, Time.deltaTime * floatSpeed);
-            yield return null;
+            onDestination = true;
+            other.gameObject.GetComponent<Draggable>().destination = this;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<IInteractable>().draggable)
+        {
+            onDestination = false;
+            other.gameObject.GetComponent<Draggable>().destination = null;
         }
     }
 }

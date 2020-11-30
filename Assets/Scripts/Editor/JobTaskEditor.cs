@@ -38,6 +38,13 @@ public class JobTaskEditor : Editor
             script.dragCompletionValue = EditorGUILayout.FloatField("Drag Completion Value:", script.dragCompletionValue);
         }
 
+        script.throwable = EditorGUILayout.Toggle("Throwable", script.throwable);
+        if (script.throwable)
+        {
+            script.throwStressValue = UnityEditor.EditorGUILayout.FloatField("Drag Stress Value:", script.throwStressValue);
+            script.throwCompletionValue = UnityEditor.EditorGUILayout.FloatField("Drag Completion Value:", script.throwCompletionValue);
+        }
+
         DrawDefaultInspector();
     }
 }

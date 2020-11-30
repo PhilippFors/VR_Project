@@ -5,16 +5,15 @@ using UnityEngine;
 public class InteractController : MonoBehaviour
 {
     Ray ray;
-    IInteractable interactionObj;
-    IInteractable oldObj;
+    [SerializeField] IInteractable interactionObj;
     [SerializeField] Camera cam;
     [SerializeField] DragController dragger;
 
-    float touchtime;
     [SerializeField] float minholdtime = 0.5f;
     [SerializeField] float minForDragTime = 0.2f;
 
     Touch touch;
+    float touchtime;
 
     bool isHovering = false;
     bool isHolding = false;
@@ -35,18 +34,19 @@ public class InteractController : MonoBehaviour
     void HoldSimulation()
     {
         RaycastHit hit;
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.Raycast(ray, out hit) & !isHolding & !isDragging)
+        ray = new Ray(cam.transform.position, cam.transform.forward);
+        if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, -1, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
         {
-            if (hit.transform.gameObject.GetComponent<JobTask>() != null)
+            var inter = hit.transform.gameObject.GetComponent<IInteractable>();
+            if (inter != null)
             {
+                interactionObj = inter;
                 touchtime += Time.deltaTime;
                 if (touchtime >= minholdtime)
                 {
-                    interactionObj = hit.transform.GetComponent<JobTask>();
-
-                    if (interactionObj.draggable)
+                    if (interactionObj.draggable & !interactionObj.active)
                         isDragging = true;
+
                     if (interactionObj.holdable)
                         isHolding = true;
                 }
@@ -70,7 +70,7 @@ public class InteractController : MonoBehaviour
 
                     isHolding = false;
                 }
-
+                
             if (isDragging)
                 if (interactionObj.draggable)
                     StopDragging();
@@ -124,7 +124,6 @@ public class InteractController : MonoBehaviour
                     {
                         Dragging();
                     }
-
                 }
                 else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
@@ -149,16 +148,20 @@ public class InteractController : MonoBehaviour
 
     void StopDragging()
     {
-        if (dragger.onDestination)
+        var draggable = interactionObj.GetComponent<Draggable>();
+
+        if (draggable.destination != null && draggable.destination.onDestination)
         {
             if (!dragger.currentDest.active && dragger.currentDest.pairObj.name.Equals(interactionObj.name))
             {
                 dragger.StopDrag(interactionObj.rb);
-                interactionObj.transform.position = dragger.currentDest.snapPosition;
-                interactionObj.transform.rotation = dragger.currentDest.snapRot;
                 interactionObj.DragAction();
                 dragger.currentDest.WaitForCompletionStart();
                 dragger.currentDest = null;
+            }
+            else
+            {
+                dragger.StartPositionReset(interactionObj);
             }
         }
         else if (dragger.onSurface)
@@ -179,8 +182,9 @@ public class InteractController : MonoBehaviour
     void FindObject()
     {
         RaycastHit hit;
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.Raycast(ray, out hit) & !isHolding & !isDragging)
+
+        ray = new Ray(cam.transform.position, cam.transform.forward);
+        if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, -1, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
         {
             var inter = hit.transform.gameObject.GetComponent<IInteractable>();
             if (inter != null)
@@ -202,7 +206,6 @@ public class InteractController : MonoBehaviour
                     if (interactionObj != null)
                         interactionObj.PointerExit();
 
-                    oldObj = interactionObj;
                     isHovering = false;
                     interactionObj = null;
                 }
@@ -215,7 +218,6 @@ public class InteractController : MonoBehaviour
                 if (interactionObj != null)
                     interactionObj.PointerExit();
 
-                oldObj = interactionObj;
                 isHovering = false;
                 interactionObj = null;
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StressreliefTask : IInteractable
+public abstract class StressreliefTask : IInteractable
 {
     [SerializeField] float stressReductionValue;
 

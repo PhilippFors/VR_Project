@@ -5,35 +5,70 @@ using UnityEngine;
 public class InteractUtilities : MonoBehaviour
 {
     public static InteractUtilities instance;
+    public BoxCollider boxCollider;
+    public GameObject area;
+    [SerializeField] float floatSpeed = 9f;
+    public LayerMask mask;
+    public DragController dragController;
 
     private void Awake()
     {
         instance = this;
     }
-    public void StartSmoothPositionChange(IInteractable i, float floatSpeed, Vector3 pos = new Vector3(), Quaternion rotat = new Quaternion())
+    public Coroutine StartSmoothPositionChange(IInteractable i, Vector3 newPos = new Vector3(), Quaternion newRot = new Quaternion())
     {
-        StartCoroutine(SmoothPositionChange(i, pos, rotat, floatSpeed));
+        return StartCoroutine(SmoothPositionChange(i, newPos, newRot));
     }
 
-    bool ret = false;
-
-    IEnumerator SmoothPositionChange(IInteractable i, Vector3 pos, Quaternion rotat, float floatSpeed)
+    IEnumerator SmoothPositionChange(IInteractable i, Vector3 newPos, Quaternion newRot)
     {
-        i.GetComponent<Rigidbody>().useGravity = false;
-        i.GetComponent<BoxCollider>().enabled = false;
+        Rigidbody rb = i.GetComponent<Rigidbody>();
+        if (rb)
+            rb.useGravity = false;
+        // i.GetComponent<BoxCollider>().enabled = false;
 
-        ret = false;
-        while (!ret)
+        if (Physics.CheckBox(newPos + new Vector3(0, 0.1f, 0), new Vector3(0.3f, 0.1f, 0.3f), Quaternion.identity, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Ignore))
         {
-            i.transform.position = Vector3.Lerp(i.transform.position, pos, Time.deltaTime * floatSpeed);
-            i.transform.rotation = Quaternion.Lerp(i.transform.rotation, rotat, Time.deltaTime * floatSpeed);
-            if (i.transform.position == pos)
-                ret = true;
+            while (Physics.CheckBox(newPos + new Vector3(0, 0.1f, 0), new Vector3(0.3f, 0.1f, 0.3f), Quaternion.identity, mask, QueryTriggerInteraction.Ignore))
+            {
+                newPos = FindRandominArea();
+                yield return null;
+            }
+        }
+
+        // rotco = StartCoroutine(SmoothRotation(i, newRot, floatSpeed));
+        while (i.transform.position != newPos & i.transform.rotation != newRot)
+        {
+            i.transform.position = Vector3.Lerp(i.transform.position, newPos, Time.deltaTime * floatSpeed);
+            i.transform.rotation = Quaternion.Lerp(i.transform.rotation, newRot, Time.deltaTime * (floatSpeed + 3f));
             yield return null;
         }
 
-        i.GetComponent<BoxCollider>().enabled = true;
-        i.GetComponent<Rigidbody>().useGravity = true;
+        // i.GetComponent<BoxCollider>().enabled = true;
+
+        yield return new WaitForSeconds(0.2f);
+
         i.StopDragAction();
+        dragController.StopDrag(rb);
     }
+
+    IEnumerator SmoothRotation(IInteractable i, Quaternion newRot, float floatSpeed)
+    {
+        while (i.transform.rotation != newRot)
+        {
+
+            yield return null;
+        }
+    }
+
+    Vector3 FindRandominArea()
+    {
+        return new Vector3(UnityEngine.Random.Range(area.transform.position.x - area.transform.localScale.x * boxCollider.size.x * 0.5f,
+                                                             area.transform.position.x + area.transform.localScale.x * boxCollider.size.x * 0.5f),
+                                    area.transform.position.y,
+                                    UnityEngine.Random.Range(area.transform.position.z - area.transform.localScale.z * boxCollider.size.z * 0.5f,
+                                                             area.transform.position.z + area.transform.localScale.z * boxCollider.size.z * 0.5f));
+    }
+
+
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Draggable : JobTask
 {
-    public bool active = false;
     public DragDestination destination;
-
+    public Coroutine currentCoroutine;
     public override void DragAction()
     {
         base.DragAction();

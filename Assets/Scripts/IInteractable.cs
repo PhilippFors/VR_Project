@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
+
 public abstract class IInteractable : MonoBehaviour
 {
-    [HideInInspector] public bool clickable, holdable, lookable, draggable;
-
+    [HideInInspector] public bool clickable, holdable, lookable, draggable, throwable;
+    public bool active = false;
     [HideInInspector] public Vector3 lastPos;
     [HideInInspector] public Quaternion lastRot;
     [HideInInspector] public Vector3 ogPos;
@@ -29,6 +29,8 @@ public abstract class IInteractable : MonoBehaviour
     {
 
     }
+
+    public virtual void ThrowAction() { }
     public virtual void PointerEnter()
     {
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class JobTask : IInteractable
 {
-    [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue;
-    [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue;
+    [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue, throwStressValue;
+    [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue, throwCompletionValue;
 
     public float currentTaskCompletionValue;
     [SerializeField] float maxTaskCompletionValue = 100f;
@@ -21,7 +21,7 @@ public abstract class JobTask : IInteractable
         ogPos = gameObject.transform.position;
         ogRot = gameObject.transform.rotation;
     }
-    
+
     void Update()
     {
         if (lookedAt)
@@ -100,6 +100,16 @@ public abstract class JobTask : IInteractable
         }
     }
 
+    public override void ThrowAction()
+    {
+        if (!throwable)
+            return;
+        else
+        {
+            AddStressOnce(throwStressValue);
+            AddCompletionOnce(throwCompletionValue);
+        }
+    }
     #region stress Adders
 
     void AddStressOnce(float stress)
