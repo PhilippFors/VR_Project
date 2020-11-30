@@ -15,6 +15,7 @@ public class InteractUtilities : MonoBehaviour
     {
         instance = this;
     }
+    
     public Coroutine StartSmoothPositionChange(IInteractable i, Vector3 newPos = new Vector3(), Quaternion newRot = new Quaternion())
     {
         return StartCoroutine(SmoothPositionChange(i, newPos, newRot));
@@ -22,6 +23,7 @@ public class InteractUtilities : MonoBehaviour
 
     IEnumerator SmoothPositionChange(IInteractable i, Vector3 newPos, Quaternion newRot)
     {
+        
         Rigidbody rb = i.GetComponent<Rigidbody>();
         if (rb)
             rb.useGravity = false;
@@ -36,30 +38,34 @@ public class InteractUtilities : MonoBehaviour
             }
         }
 
+        i.transform.rotation = newRot;
+        i.transform.position = newPos;
+
         // rotco = StartCoroutine(SmoothRotation(i, newRot, floatSpeed));
-        while (i.transform.position != newPos & i.transform.rotation != newRot)
-        {
-            i.transform.position = Vector3.Lerp(i.transform.position, newPos, Time.deltaTime * floatSpeed);
-            i.transform.rotation = Quaternion.Lerp(i.transform.rotation, newRot, Time.deltaTime * (floatSpeed + 3f));
-            yield return null;
-        }
+        // while (Mathf.Approximately(i.transform.position.x, newPos.x) &
+        //         Mathf.Approximately(i.transform.position.y, newPos.y) &
+        //         Mathf.Approximately(i.transform.position.z, newPos.z))
+        // {
+        //     i.transform.position = Vector3.Lerp(i.transform.position, newPos, Time.deltaTime * floatSpeed);
+        //     // i.transform.rotation = Quaternion.Slerp(i.transform.rotation, newRot, Time.deltaTime * (floatSpeed + 3f));
+        //     yield return null;
+        // }
 
         // i.GetComponent<BoxCollider>().enabled = true;
 
-        yield return new WaitForSeconds(0.2f);
+        // yield return new WaitForSeconds(0.2f);
 
         i.StopDragAction();
         dragController.StopDrag(rb);
     }
 
-    IEnumerator SmoothRotation(IInteractable i, Quaternion newRot, float floatSpeed)
-    {
-        while (i.transform.rotation != newRot)
-        {
-
-            yield return null;
-        }
-    }
+    // IEnumerator SmoothRotation(IInteractable i, Quaternion newRot, float floatSpeed)
+    // {
+    //     while (i.transform.rotation != newRot)
+    //     {
+    //         yield return null;
+    //     }
+    // }
 
     Vector3 FindRandominArea()
     {

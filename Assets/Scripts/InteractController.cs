@@ -15,9 +15,9 @@ public class InteractController : MonoBehaviour
     Touch touch;
     float touchtime;
 
-    bool isHovering = false;
-    bool isHolding = false;
-    bool isDragging = false;
+    public bool isHovering = false;
+    public bool isHolding = false;
+    public bool isDragging = false;
 
     void Update()
     {
@@ -168,7 +168,7 @@ public class InteractController : MonoBehaviour
         {
             dragger.StopDrag(interactionObj.rb);
         }
-        else if (!dragger.onSurface & !dragger.onDestination)
+        else if (!dragger.onSurface && !dragger.onDestination)
         {
             dragger.StartPositionReset(interactionObj);
         }

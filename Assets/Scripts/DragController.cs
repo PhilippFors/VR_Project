@@ -14,7 +14,7 @@ public class DragController : MonoBehaviour
     public bool onDestination = false;
     LayerMask surfaceMask => LayerMask.GetMask("Surface");
     LayerMask destinationMask => LayerMask.GetMask("Drag Destination");
-    [SerializeField] LayerMask defaultMask;
+    public LayerMask defaultMask;
     Vector3 newPos;
     Quaternion newRot;
     RaycastHit hit;
@@ -62,7 +62,7 @@ public class DragController : MonoBehaviour
                         }
                         else
                         {
-                            pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.2f);
+                            pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
                             newPos = pos;
 
                             Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;
@@ -80,6 +80,7 @@ public class DragController : MonoBehaviour
         }
         else
         {
+            currentDest = null;
             FindNearestPoint(obj);
         }
     }
@@ -96,7 +97,7 @@ public class DragController : MonoBehaviour
             }
             else
             {
-                Vector3 pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.2f);
+                Vector3 pos = cam.transform.position + cam.transform.forward * (hit.distance - 0.1f);
                 newPos = pos;
 
                 Vector3 temp = hit.transform.gameObject.transform.position - obj.transform.position;

@@ -880,8 +880,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3830006, y: 0.2067796, z: 0.58260965}
-  m_Center: {x: -0.024714708, y: -0.042244256, z: -0.048265457}
+  m_Size: {x: 0.4304428, y: 0.23899794, z: 0.6323192}
+  m_Center: {x: -0.048435807, y: -0.026135087, z: -0.07312024}
 --- !u!1001 &730236706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1545,7 +1545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1769789088
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2144,6 +2144,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scripts
       objectReference: {fileID: 0}
+    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 120786058}
+    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
+        type: 3}
+      propertyPath: minDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
+        type: 3}
+      propertyPath: maxDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
+        type: 3}
+      propertyPath: floatSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
+        type: 3}
+      propertyPath: defaultMask.m_Bits
+      value: 3073
+      objectReference: {fileID: 0}
     - target: {fileID: 7022114164760569424, guid: ca857cf37affdf84dbc55f3b391490b3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2198,31 +2223,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
-        type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 120786058}
-    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
-        type: 3}
-      propertyPath: minDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
-        type: 3}
-      propertyPath: maxDistance
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
-        type: 3}
-      propertyPath: floatSpeed
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6851573070390088391, guid: ca857cf37affdf84dbc55f3b391490b3,
-        type: 3}
-      propertyPath: defaultMask.m_Bits
-      value: 3329
       objectReference: {fileID: 0}
     - target: {fileID: 7022114164048929983, guid: ca857cf37affdf84dbc55f3b391490b3,
         type: 3}
