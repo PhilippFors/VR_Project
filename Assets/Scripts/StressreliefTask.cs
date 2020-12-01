@@ -6,6 +6,12 @@ public abstract class StressreliefTask : IInteractable
 {
     [SerializeField] float stressReductionValue;
 
+    private void Awake()
+    {
+        ogPos = transform.position;
+        ogRot = transform.rotation;
+    }
+    
     public override void HoldAction()
     {
         if (!holdable)

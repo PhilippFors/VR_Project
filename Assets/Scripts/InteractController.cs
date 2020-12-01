@@ -25,13 +25,13 @@ public class InteractController : MonoBehaviour
     {
         FindObject();
 
-        HoldSimulation();
+        // HoldSimulation();
 
-        // ThrowInteraction();
+        ThrowInteraction();
 
-        // CheckForHoldAction();
+        CheckForHoldAction();
 
-        // DragInteraction();
+        DragInteraction();
     }
 
     //Used for Debugging in the Editor

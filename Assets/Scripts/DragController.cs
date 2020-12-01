@@ -13,7 +13,7 @@ public class DragController : MonoBehaviour
     public float floatSpeed = 6f;
     public bool onSurface = false;
     public bool onDestination = false;
-
+    public float offsetSingle = 0f;
     public Vector3 offset = new Vector3(0f, 0.15f, 0f);
     LayerMask surfaceMask => LayerMask.GetMask("Surface");
     LayerMask destinationMask => LayerMask.GetMask("Drag Destination");
@@ -44,8 +44,8 @@ public class DragController : MonoBehaviour
             newPos = cam.transform.position + cam.transform.forward * Vector3.Distance(cam.transform.position, obj.lastPos);
             obj.GetComponent<Draggable>().velocity = newPos - oldPos;
 
-            Vector3 rot = cam.transform.position - obj.transform.position;
-            obj.transform.rotation = Quaternion.LookRotation(rot);
+            // Vector3 rot = cam.transform.position - obj.transform.position;
+            // obj.transform.rotation = Quaternion.LookRotation(rot);
             // rb.MovePosition(newPos);
             onSurface = false;
         }
@@ -91,7 +91,10 @@ public class DragController : MonoBehaviour
                     {
                         if (hit.transform.gameObject.tag.Equals("Surface"))
                         {
-                            newPos = hit.point + offset;
+                            Vector3 temp = cam.transform.position - hit.point;
+                            Vector3 tempNormal = temp.normalized;
+                            Vector3 targetPos = new Vector3(tempNormal.x * offsetSingle, hit.point.y, tempNormal.z * offsetSingle);
+                            newPos = targetPos + offset;
                             newRot = obj.GetComponent<IInteractable>().ogRot;
                             onSurface = true;
                         }
@@ -153,7 +156,10 @@ public class DragController : MonoBehaviour
                 // }
                 // else
                 // {
-                newPos = hit.point + offset;
+                Vector3 temp = cam.transform.position - hit.point;
+                Vector3 tempNormal = temp.normalized;
+                Vector3 targetPos = hit.point + tempNormal * offsetSingle;
+                newPos = new Vector3(targetPos.x, hit.point.y, targetPos.z) + offset;
                 newRot = obj.GetComponent<IInteractable>().ogRot;
                 onSurface = true;
                 // }
@@ -199,8 +205,13 @@ public class DragController : MonoBehaviour
 
     IEnumerator SmoothPositionReset(IInteractable interactable)
     {
+
+        if (interactable.rb != null)
+            interactable.rb.useGravity = false;
+            
         yield return InteractUtilities.instance.StartSmoothPositionChange(interactable, interactable.lastPos, interactable.lastRot);
 
+        interactable.StopDragAction();
         StopDrag(interactable.rb);
     }
 }

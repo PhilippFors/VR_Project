@@ -43,6 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac3f01f2c86a4a846b8568e668c4c8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boxCollider: {fileID: 0}
+  area: {fileID: 0}
+  floatSpeed: 0.3
+  mask:
+    serializedVersion: 2
+    m_Bits: 2817
+  dragController: {fileID: 6851573070390088391}
 --- !u!1 &7022114164048929977
 GameObject:
   m_ObjectHideFlags: 0
@@ -86,10 +93,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b687d41d19504c4f95afb40bf999537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionObj: {fileID: 0}
   cam: {fileID: 0}
   dragger: {fileID: 6851573070390088391}
   minholdtime: 0.5
   minForDragTime: 0.2
+  throwImpulse: 40
+  isHovering: 0
+  isHolding: 0
+  isDragging: 0
 --- !u!1 &7022114164760569427
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,12 +180,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
-  minDistance: 2
+  currentDest: {fileID: 0}
+  helper: {fileID: 0}
+  minDistance: 1
   maxDistance: 5
-  floatSpeed: 9
+  floatSpeed: 6
   onSurface: 0
   onDestination: 0
-  currentDest: {fileID: 0}
+  offsetSingle: 0.26
+  offset: {x: 0, y: 0.15, z: 0}
+  defaultMask:
+    serializedVersion: 2
+    m_Bits: 3073
 --- !u!1 &7022114165567353819
 GameObject:
   m_ObjectHideFlags: 0

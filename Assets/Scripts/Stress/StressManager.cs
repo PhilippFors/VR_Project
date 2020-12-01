@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class StressManager : MonoBehaviour
 {
-    public float currentStress;
-
-    public float maxStress;
+    public FloatVariable currentStress;
+    public FloatVariable maxStress;
 
     public static StressManager instance;
 
@@ -17,17 +16,17 @@ public class StressManager : MonoBehaviour
 
     public void AddStress(float value)
     {
-        if (currentStress + value >= maxStress)
+        if (currentStress.Value + value >= maxStress.Value)
             Debug.Log("You died");
         else
-            currentStress += value;
+            currentStress.Value += value;
     }
 
     public void RelieveStress(float value)
     {
-        if (currentStress - value <= 0)
-            currentStress = 0;
+        if (currentStress.Value - value <= 0)
+            currentStress.Value = 0;
         else
-            currentStress -= value;
+            currentStress.Value -= value;
     }
 }

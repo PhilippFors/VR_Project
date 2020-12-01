@@ -28,16 +28,20 @@ public class DragDestination : MonoBehaviour
         active = true;
         yield return new WaitForSeconds(completionTime);
         active = false;
+
+        pairObj.rb.useGravity = false;
+
         positionChangeCoroutine = InteractUtilities.instance.StartSmoothPositionChange(pairObj, pairObj.ogPos, pairObj.ogRot);
         pairObj.GetComponent<Draggable>().currentCoroutine = positionChangeCoroutine;
         yield return positionChangeCoroutine;
 
         pairObj.StopDragAction();
+        pairObj.rb.useGravity = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
         if (other.gameObject.GetComponent<IInteractable>().draggable)
         {
             onDestination = true;
