@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bc42e25c06b47d4095913dcbc82c44e, type: 3}
   m_Name: currentStress
   m_EditorClassIdentifier: 
-  Value: 0
+  Value: 15

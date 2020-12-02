@@ -14,6 +14,11 @@ public class StressManager : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        currentStress.Value = 0;
+    }
+
     public void AddStress(float value)
     {
         if (currentStress.Value + value >= maxStress.Value)

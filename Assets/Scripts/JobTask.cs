@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class JobTask : IInteractable
-{
+{   
+    public string taskName;
     [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue, throwStressValue;
     [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue, throwCompletionValue;
 
     public float currentTaskCompletionValue;
-    [SerializeField] float maxTaskCompletionValue = 100f;
+    public float maxTaskCompletionValue = 100f;
     [SerializeField] float completionReductionValue;
 
     [SerializeField] float waitForReduction = 2f;
@@ -20,6 +21,8 @@ public abstract class JobTask : IInteractable
     {
         ogPos = gameObject.transform.position;
         ogRot = gameObject.transform.rotation;
+        currentTaskCompletionValue = Random.Range(30f, 90f);
+        StartTaskReduction();
     }
 
     void Update()

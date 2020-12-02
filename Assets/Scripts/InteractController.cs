@@ -5,9 +5,11 @@ using UnityEngine;
 public class InteractController : MonoBehaviour
 {
     Ray ray;
+    public LayerMask raycastMasks;
     [SerializeField] IInteractable interactionObj;
     [SerializeField] Camera cam;
     [SerializeField] DragController dragger;
+
 
     [SerializeField] float minholdtime = 0.5f;
     [SerializeField] float minForDragTime = 0.2f;
@@ -39,7 +41,7 @@ public class InteractController : MonoBehaviour
     {
         RaycastHit hit;
         ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, -1, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
+        if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, raycastMasks, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
         {
             var inter = hit.transform.gameObject.GetComponent<IInteractable>();
             if (inter != null)
@@ -250,7 +252,7 @@ public class InteractController : MonoBehaviour
         RaycastHit hit;
 
         ray = new Ray(cam.transform.position, cam.transform.forward);
-        if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, -1, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
+        if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, raycastMasks, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
         {
             var inter = hit.transform.gameObject.GetComponent<IInteractable>();
             if (inter != null)
