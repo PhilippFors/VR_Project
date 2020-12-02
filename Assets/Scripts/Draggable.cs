@@ -5,9 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Draggable : JobTask
 {
-    public DragDestination destination;
-    public Coroutine currentCoroutine;
-    public Vector3 velocity;
+    [HideInInspector] public DragDestination destination;
+    [HideInInspector] public Vector3 velocity;
+
     public override void DragAction()
     {
         base.DragAction();

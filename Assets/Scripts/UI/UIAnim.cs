@@ -6,28 +6,57 @@ using DG.Tweening;
 
 public class UIAnim : IInteractable
 {
-    public Image TaskRing;
-    public Image TaskName;
+    [SerializeField] TaskUI ui;
+    public Image TaskRingBG;
+    public Image TaskRingFG;
+    public Image middleBG;
     Vector3 ogTaskRingScale;
-    Vector3 ogTaskNameScale;
+    Vector3 ogFGRingScale;
+    Vector3 ogMiddlBGScale;
+    public float ringEndScale;
+    public float FGRingEndScale;
+    public float middleEndPos;
+    public float FGEndPos;
 
-    public Vector3 ringEndScale;
-    public Vector3 nameEndScale;
+    [Header("BG Indicator Colors")]
+    public Color fine;
+    public Color uhOh;
+    public Color danger;
     private void Start()
     {
-        ogTaskRingScale = TaskRing.transform.localScale;
-        ogTaskNameScale = TaskName.transform.localScale;
-
+        ogTaskRingScale = TaskRingBG.transform.localScale;
+        ogFGRingScale = TaskRingFG.transform.localScale;
+        ogMiddlBGScale = middleBG.transform.localScale;
     }
     public override void PointerEnter()
     {
-        TaskRing.transform.DOScale(ringEndScale, 0.8f);
-        TaskName.transform.DOScale(nameEndScale, 0.8f);
+        TaskRingBG.transform.DOScale(ogTaskRingScale + new Vector3(ringEndScale, ringEndScale, 0), 0.8f);
+
+        middleBG.transform.DOScale(ogMiddlBGScale + new Vector3(ringEndScale, ringEndScale, 0), 0.8f);
+        // middleBG.transform.DOLocalMoveZ(middleEndPos, 0.8f);
+
+        TaskRingFG.transform.DOLocalMoveZ(FGEndPos, 0.8f);
+        TaskRingFG.transform.DOScale(ogFGRingScale + new Vector3(FGRingEndScale, FGRingEndScale, 0), 0.8f);
     }
 
     public override void PointerExit()
     {
-        TaskRing.transform.DOScale(ogTaskRingScale, 0.8f);
-        TaskName.transform.DOScale(ogTaskNameScale, 0.8f);
+        TaskRingBG.transform.DOScale(ogTaskRingScale, 0.8f);
+
+        middleBG.transform.DOScale(ogMiddlBGScale, 0.8f);
+        // middleBG.transform.DOLocalMoveZ(0, 0.8f);
+
+        TaskRingFG.transform.DOLocalMoveZ(0, 0.8f);
+        TaskRingFG.transform.DOScale(ogFGRingScale, 0.8f);
+    }
+
+    private void Update()
+    {
+        if (ui.task.currentTaskCompletionValue >= 70f)
+            middleBG.color = fine;
+        else if (ui.task.currentTaskCompletionValue < 70f && ui.task.currentTaskCompletionValue >= 40f)
+            middleBG.color = uhOh;
+        else
+            middleBG.color = danger;
     }
 }

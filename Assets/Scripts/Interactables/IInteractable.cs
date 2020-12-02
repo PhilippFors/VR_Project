@@ -1,9 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public struct InteractableDesc
+{
+    public string name;
+
+    public string description;
+}
 
 public abstract class IInteractable : MonoBehaviour
 {
+    public InteractableDesc information;
+
     [HideInInspector] public bool clickable, holdable, lookable, draggable, throwable;
     public bool active = false;
     [HideInInspector] public Vector3 lastPos;

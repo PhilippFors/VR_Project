@@ -10,7 +10,7 @@ public class TaskUI : MonoBehaviour
 
     private void Start()
     {
-        UiText.text = task.taskName;
+        UiText.text = task.information.name;
     }
     void Update()
     {

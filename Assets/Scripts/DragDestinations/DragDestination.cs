@@ -6,13 +6,16 @@ public class DragDestination : MonoBehaviour
 {
     public bool active = false;
     public bool onDestination = false;
+
     public IInteractable pairObj;
+
     [SerializeField] Transform snapObj;
     public Vector3 snapPosition => snapObj.transform.position;
     public Quaternion snapRot => snapObj.transform.rotation;
+
     [SerializeField] float completionTime = 3f;
     [SerializeField] float floatSpeed = 9f;
-    Coroutine positionChangeCoroutine;
+    
     private void Start()
     {
         // pairObj.GetComponent<Draggable>().destination = this;
@@ -29,14 +32,9 @@ public class DragDestination : MonoBehaviour
         yield return new WaitForSeconds(completionTime);
         active = false;
 
-        pairObj.rb.useGravity = false;
-
-        positionChangeCoroutine = InteractUtilities.instance.StartSmoothPositionChange(pairObj, pairObj.ogPos, pairObj.ogRot);
-        pairObj.GetComponent<Draggable>().currentCoroutine = positionChangeCoroutine;
-        yield return positionChangeCoroutine;
+        yield return InteractUtilities.instance.StartSmoothPositionChange(pairObj, pairObj.ogPos, pairObj.ogRot, true, true);
 
         pairObj.StopDragAction();
-        pairObj.rb.useGravity = true;
     }
 
     private void OnTriggerEnter(Collider other)

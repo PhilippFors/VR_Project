@@ -16,8 +16,6 @@ public class StressReliefCoffee : StressreliefTask
     public override void StopHold()
     {
         gameObject.transform.SetParent(null);
-        InteractUtilities.instance.StartSmoothPositionChange(this, ogPos, ogRot);
+        InteractUtilities.instance.StartSmoothPositionChange(this, ogPos, ogRot, true);
     }
-
-    // transform.parent = helper_close;
 }

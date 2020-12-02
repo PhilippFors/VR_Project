@@ -46,15 +46,18 @@ public class InteractController : MonoBehaviour
             var inter = hit.transform.gameObject.GetComponent<IInteractable>();
             if (inter != null)
             {
-                interactionObj = inter;
-                touchtime += Time.deltaTime;
-                if (touchtime >= minholdtime)
+                if (!inter.active)
                 {
-                    if (interactionObj.draggable | interactionObj.throwable & !interactionObj.active)
-                        isDragging = true;
+                    interactionObj = inter;
+                    touchtime += Time.deltaTime;
+                    if (touchtime >= minholdtime)
+                    {
+                        if (interactionObj.draggable | interactionObj.throwable & !interactionObj.active)
+                            isDragging = true;
 
-                    if (interactionObj.holdable)
-                        isHolding = true;
+                        if (interactionObj.holdable)
+                            isHolding = true;
+                    }
                 }
             }
         }
@@ -254,16 +257,20 @@ public class InteractController : MonoBehaviour
         ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out hit, dragger.maxDistance + 2, raycastMasks, QueryTriggerInteraction.Ignore) & !isHolding & !isDragging)
         {
+
             var inter = hit.transform.gameObject.GetComponent<IInteractable>();
             if (inter != null)
             {
-                if (interactionObj == null)
+                if (!inter.active)
                 {
-                    interactionObj = inter;
-                    if (!isHovering & !isHolding & !isDragging)
+                    if (interactionObj == null)
                     {
-                        interactionObj.PointerEnter();
-                        isHovering = true;
+                        interactionObj = inter;
+                        if (!isHovering & !isHolding & !isDragging)
+                        {
+                            interactionObj.PointerEnter();
+                            isHovering = true;
+                        }
                     }
                 }
             }

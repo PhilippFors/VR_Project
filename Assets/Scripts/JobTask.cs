@@ -4,15 +4,15 @@ using UnityEngine;
 
 public abstract class JobTask : IInteractable
 {   
-    public string taskName;
     [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue, throwStressValue;
     [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue, throwCompletionValue;
 
     public float currentTaskCompletionValue;
     public float maxTaskCompletionValue = 100f;
+    
     [SerializeField] float completionReductionValue;
-
     [SerializeField] float waitForReduction = 2f;
+
     bool reset;
     bool lookedAt;
     Coroutine coroutine;
