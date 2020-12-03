@@ -24,18 +24,19 @@ using UnityEngine.EventSystems;
 [HelpURL("https://developers.google.com/vr/unity/reference/class/GvrReticlePointer")]
 public class GvrReticlePointer : GvrBasePointer
 {
+    public RaycastResult result;
     /// <summary>
     /// The constants below are expsed for testing. Minimum inner angle of the reticle (in degrees).
     /// </summary>
     public const float RETICLE_MIN_INNER_ANGLE = 0.0f;
 
     /// <summary>Minimum outer angle of the reticle (in degrees).</summary>
-    public const float RETICLE_MIN_OUTER_ANGLE = 0.5f;
+    public const float RETICLE_MIN_OUTER_ANGLE = 0.3f;
 
     /// <summary>
     /// Angle at which to expand the reticle when intersecting with an object (in degrees).
     /// </summary>
-    public const float RETICLE_GROWTH_ANGLE = 1.5f;
+    public const float RETICLE_GROWTH_ANGLE = 0.8f;
 
     /// <summary>Minimum distance of the reticle (in meters).</summary>
     public const float RETICLE_DISTANCE_MIN = 0.45f;
@@ -99,6 +100,7 @@ public class GvrReticlePointer : GvrBasePointer
     /// <inheritdoc/>
     public override void OnPointerEnter(RaycastResult raycastResultResult, bool isInteractive)
     {
+        result = raycastResultResult;
         SetPointerTarget(raycastResultResult.worldPosition, isInteractive);
     }
 
@@ -111,6 +113,7 @@ public class GvrReticlePointer : GvrBasePointer
     /// <inheritdoc/>
     public override void OnPointerExit(GameObject previousObject)
     {
+        result = new RaycastResult();
         ReticleDistanceInMeters = maxReticleDistance;
         ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE;
         ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE;
@@ -217,15 +220,20 @@ public class GvrReticlePointer : GvrBasePointer
         ReticleDistanceInMeters = Mathf.Clamp(targetLocalPosition.z,
                                               RETICLE_DISTANCE_MIN,
                                               maxReticleDistance);
-        if (interactive)
+
+        var inter = result.gameObject;
+        if (inter.gameObject.layer != LayerMask.NameToLayer("UI") && !inter.gameObject.GetComponent<UIAnim>())
         {
-            ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE + RETICLE_GROWTH_ANGLE;
-            ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE + RETICLE_GROWTH_ANGLE;
-        }
-        else
-        {
-            ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE;
-            ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE;
+            if (interactive)
+            {
+                ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE + RETICLE_GROWTH_ANGLE;
+                ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE + RETICLE_GROWTH_ANGLE;
+            }
+            else
+            {
+                ReticleInnerAngle = RETICLE_MIN_INNER_ANGLE;
+                ReticleOuterAngle = RETICLE_MIN_OUTER_ANGLE;
+            }
         }
 
         return true;
@@ -240,7 +248,7 @@ public class GvrReticlePointer : GvrBasePointer
         int segments_count = reticleSegments;
         int vertex_count = (segments_count + 1) * 2;
 
-#region Vertices
+        #region Vertices
 
         Vector3[] vertices = new Vector3[vertex_count];
 
@@ -258,9 +266,9 @@ public class GvrReticlePointer : GvrBasePointer
             vertices[vi++] = new Vector3(x, y, 0.0f); // Outer vertex.
             vertices[vi++] = new Vector3(x, y, 1.0f); // Inner vertex.
         }
-#endregion
+        #endregion
 
-#region Triangles
+        #region Triangles
         int indices_count = (segments_count + 1) * 3 * 2;
         int[] indices = new int[indices_count];
 
@@ -278,7 +286,7 @@ public class GvrReticlePointer : GvrBasePointer
 
             vert += 2;
         }
-#endregion
+        #endregion
 
         mesh.vertices = vertices;
         mesh.triangles = indices;
