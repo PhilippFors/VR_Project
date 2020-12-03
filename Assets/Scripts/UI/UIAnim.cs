@@ -6,6 +6,8 @@ using DG.Tweening;
 
 public class UIAnim : IInteractable
 {
+    [SerializeField] Camera mainCam;
+    public float animSpeed = 0.5f;
     [SerializeField] TaskUI ui;
     public Image TaskRingBG;
     public Image TaskRingFG;
@@ -18,45 +20,33 @@ public class UIAnim : IInteractable
     public float middleEndPos;
     public float FGEndPos;
 
-    [Header("BG Indicator Colors")]
-    public Color fine;
-    public Color uhOh;
-    public Color danger;
     private void Start()
     {
         ogTaskRingScale = TaskRingBG.transform.localScale;
         ogFGRingScale = TaskRingFG.transform.localScale;
         ogMiddlBGScale = middleBG.transform.localScale;
+        gameObject.transform.rotation = Quaternion.LookRotation(-(mainCam.transform.position - gameObject.transform.position));
     }
     public override void PointerEnter()
     {
-        TaskRingBG.transform.DOScale(ogTaskRingScale + new Vector3(ringEndScale, ringEndScale, 0), 0.8f);
+        TaskRingBG.transform.DOScale(ogTaskRingScale + new Vector3(ringEndScale, ringEndScale, 0), animSpeed);
 
-        middleBG.transform.DOScale(ogMiddlBGScale + new Vector3(ringEndScale, ringEndScale, 0), 0.8f);
+        // middleBG.transform.DOScale(ogMiddlBGScale + new Vector3(ringEndScale, ringEndScale, 0), 0.8f);
         // middleBG.transform.DOLocalMoveZ(middleEndPos, 0.8f);
 
-        TaskRingFG.transform.DOLocalMoveZ(FGEndPos, 0.8f);
-        TaskRingFG.transform.DOScale(ogFGRingScale + new Vector3(FGRingEndScale, FGRingEndScale, 0), 0.8f);
+        TaskRingFG.transform.DOLocalMoveZ(FGEndPos, animSpeed);
+        TaskRingFG.transform.DOScale(ogFGRingScale + new Vector3(FGRingEndScale, FGRingEndScale, 0), animSpeed);
     }
 
     public override void PointerExit()
     {
-        TaskRingBG.transform.DOScale(ogTaskRingScale, 0.8f);
+        TaskRingBG.transform.DOScale(ogTaskRingScale, animSpeed);
 
-        middleBG.transform.DOScale(ogMiddlBGScale, 0.8f);
+        // middleBG.transform.DOScale(ogMiddlBGScale, 0.8f);
         // middleBG.transform.DOLocalMoveZ(0, 0.8f);
 
-        TaskRingFG.transform.DOLocalMoveZ(0, 0.8f);
-        TaskRingFG.transform.DOScale(ogFGRingScale, 0.8f);
+        TaskRingFG.transform.DOLocalMoveZ(0, animSpeed);
+        TaskRingFG.transform.DOScale(ogFGRingScale, animSpeed);
     }
 
-    private void Update()
-    {
-        if (ui.task.currentTaskCompletionValue >= 70f)
-            middleBG.color = fine;
-        else if (ui.task.currentTaskCompletionValue < 70f && ui.task.currentTaskCompletionValue >= 40f)
-            middleBG.color = uhOh;
-        else
-            middleBG.color = danger;
-    }
 }
