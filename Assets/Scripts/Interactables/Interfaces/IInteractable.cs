@@ -9,19 +9,30 @@ public struct InteractableDesc
     public string description;
 }
 
+[RequireComponent(typeof(Rigidbody))]
 public abstract class IInteractable : MonoBehaviour
 {
     public InteractableDesc information;
 
     [HideInInspector] public bool clickable, holdable, lookable, draggable, throwable;
-    public bool active = false;
+
+    //When true, can be interacted with
+    public bool interactable;
     [HideInInspector] public Vector3 lastPos;
     [HideInInspector] public Quaternion lastRot;
     [HideInInspector] public Vector3 ogPos;
     [HideInInspector] public Quaternion ogRot;
 
-    public Rigidbody rb => GetComponent<Rigidbody>();
 
+    //For Draggable interactions
+    [HideInInspector] public DragDestination destination;
+    [HideInInspector] public Vector3 velocity;
+    [HideInInspector] public Rigidbody rb => GetComponent<Rigidbody>();
+
+    private void Start()
+    {
+        interactable = true;
+    }
     public virtual void HoldAction()
     {
 
@@ -38,8 +49,10 @@ public abstract class IInteractable : MonoBehaviour
     {
 
     }
+    public virtual void ThrowAction()
+    {
 
-    public virtual void ThrowAction() { }
+    }
     public virtual void PointerEnter()
     {
 
@@ -52,5 +65,4 @@ public abstract class IInteractable : MonoBehaviour
     {
 
     }
-
 }

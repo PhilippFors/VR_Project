@@ -8,7 +8,6 @@ public class InteractUtilities : MonoBehaviour
     public static InteractUtilities instance;
     [SerializeField] BoxCollider boxArea;
     [SerializeField] GameObject area;
-    [SerializeField] float floatSpeed = 0.5f;
     [SerializeField] LayerMask mask;
 
     private void Awake()
@@ -61,8 +60,8 @@ public class InteractUtilities : MonoBehaviour
             }
         }
 
-        i.transform.DORotateQuaternion(newRot, floatSpeed);
-        yield return i.transform.DOMove(newPos, floatSpeed);
+        i.transform.DORotateQuaternion(newRot, GameSettings.instance.tweenSpeed);
+        yield return i.transform.DOMove(newPos,  GameSettings.instance.tweenSpeed);
 
         if (colliderOff)
         {

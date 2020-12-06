@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class UIAnim : IInteractable
 {
-    [SerializeField] Camera mainCam;
+
     public float animSpeed = 0.5f;
     [SerializeField] TaskUI ui;
     public Image TaskRingBG;
@@ -25,7 +25,7 @@ public class UIAnim : IInteractable
         ogTaskRingScale = TaskRingBG.transform.localScale;
         ogFGRingScale = TaskRingFG.transform.localScale;
         ogMiddlBGScale = middleBG.transform.localScale;
-        gameObject.transform.rotation = Quaternion.LookRotation(-(mainCam.transform.position - gameObject.transform.position));
+        
     }
     public override void PointerEnter()
     {
@@ -48,5 +48,7 @@ public class UIAnim : IInteractable
         TaskRingFG.transform.DOLocalMoveZ(0, animSpeed);
         TaskRingFG.transform.DOScale(ogFGRingScale, animSpeed);
     }
+
+
 
 }

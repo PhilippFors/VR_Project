@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class JobTask : IInteractable
-{   
+{
     [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue, throwStressValue;
     [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue, throwCompletionValue;
 
     public float currentTaskCompletionValue;
     public float maxTaskCompletionValue = 100f;
-    
+
     [SerializeField] float completionReductionValue;
     [SerializeField] float waitForReduction = 2f;
 
@@ -21,14 +21,17 @@ public abstract class JobTask : IInteractable
     {
         ogPos = gameObject.transform.position;
         ogRot = gameObject.transform.rotation;
-        currentTaskCompletionValue = Random.Range(30f, 90f);
+        currentTaskCompletionValue = Random.Range(35f, 90f);
         StartTaskReduction();
     }
 
     void Update()
     {
         if (lookedAt)
+        {
             AddCompletionOverTime(lookCompletionValue);
+            AddStressOverTime(lookStressValue);
+        }
     }
 
     public override void HoldAction()
@@ -54,6 +57,7 @@ public abstract class JobTask : IInteractable
             return;
         else
         {
+            interactable = false;
             AddStressOnce(dragStressValue);
             AddCompletionOnce(dragCompletionValue);
             RestartTaskReduction();
@@ -62,7 +66,7 @@ public abstract class JobTask : IInteractable
 
     public override void StopDragAction()
     {
-
+        interactable = true;
     }
 
     public override void PointerEnter()
@@ -74,7 +78,6 @@ public abstract class JobTask : IInteractable
             return;
         else
         {
-            AddStressOverTime(lookStressValue);
             lookedAt = true;
             StopTaskReduction();
         }
@@ -110,6 +113,8 @@ public abstract class JobTask : IInteractable
         else
         {
             AddStressOnce(throwStressValue);
+
+            // should be doing throw counter stuff
             AddCompletionOnce(throwCompletionValue);
         }
     }
