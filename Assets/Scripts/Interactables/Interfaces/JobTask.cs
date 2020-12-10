@@ -7,6 +7,7 @@ public abstract class JobTask : IInteractable
     [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue, throwStressValue;
     [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue, throwCompletionValue;
 
+    [Header("Task Settings")]
     public float currentTaskCompletionValue;
     public float maxTaskCompletionValue = 100f;
 
@@ -16,6 +17,8 @@ public abstract class JobTask : IInteractable
     bool reset;
     bool lookedAt;
     Coroutine coroutine;
+
+    public event System.Action updateThrowCounter;
 
     private void Start()
     {
@@ -113,11 +116,26 @@ public abstract class JobTask : IInteractable
         else
         {
             AddStressOnce(throwStressValue);
-
-            // should be doing throw counter stuff
             AddCompletionOnce(throwCompletionValue);
+
+            if (throwCounter == maxThrows)
+                StartCoroutine(ThrowReset());
+            else
+            {
+                throwCounter--;
+            }
+
+            if (throwCounter < 0)
+            {
+                throwCounter = 0;
+                MyEventSystem.instance.PenaltyTrigger();
+            }
+
+            updateThrowCounter?.Invoke();
         }
     }
+
+
     #region stress Adders
 
     void AddStressOnce(float stress)
@@ -131,22 +149,6 @@ public abstract class JobTask : IInteractable
     }
 
     #endregion
-
-    public void ResetLastPosition()
-    {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        transform.position = lastPos;
-        transform.rotation = lastRot;
-    }
-
-    public void ResetOgPosition()
-    {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        transform.position = ogPos;
-        transform.rotation = ogRot;
-    }
 
     protected void AddCompletionOnce(float value)
     {
@@ -190,5 +192,22 @@ public abstract class JobTask : IInteractable
             currentTaskCompletionValue -= completionReductionValue * Time.deltaTime;
             yield return null;
         }
+    }
+
+    IEnumerator ThrowReset()
+    {
+        throwCounter--;
+        while (throwCounter < maxThrows)
+        {
+            yield return new WaitForSeconds(waitCounterReset);
+            throwCounter++;
+            updateThrowCounter?.Invoke();
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag.Equals("Surface") && throwable)
+            interactable = true;
     }
 }

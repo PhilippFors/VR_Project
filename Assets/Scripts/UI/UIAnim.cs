@@ -22,33 +22,44 @@ public class UIAnim : IInteractable
 
     private void Start()
     {
-        ogTaskRingScale = TaskRingBG.transform.localScale;
-        ogFGRingScale = TaskRingFG.transform.localScale;
-        ogMiddlBGScale = middleBG.transform.localScale;
-        
+        if (TaskRingBG != null)
+            ogTaskRingScale = TaskRingBG.transform.localScale;
+        if (TaskRingFG != null)
+            ogFGRingScale = TaskRingFG.transform.localScale;
+        if (middleBG != null)
+            ogMiddlBGScale = middleBG.transform.localScale;
     }
     public override void PointerEnter()
     {
-        TaskRingBG.transform.DOScale(ogTaskRingScale + new Vector3(ringEndScale, ringEndScale, 0), animSpeed);
+        if (TaskRingBG != null)
+            TaskRingBG.transform.DOScale(ogTaskRingScale + new Vector3(ringEndScale, ringEndScale, 0), animSpeed);
 
-        // middleBG.transform.DOScale(ogMiddlBGScale + new Vector3(ringEndScale, ringEndScale, 0), 0.8f);
-        // middleBG.transform.DOLocalMoveZ(middleEndPos, 0.8f);
-
-        TaskRingFG.transform.DOLocalMoveZ(FGEndPos, animSpeed);
-        TaskRingFG.transform.DOScale(ogFGRingScale + new Vector3(FGRingEndScale, FGRingEndScale, 0), animSpeed);
+        if (middleBG != null)
+        {
+            middleBG.transform.DOScale(ogMiddlBGScale + new Vector3(ringEndScale, ringEndScale, 0), animSpeed);
+            middleBG.transform.DOLocalMoveZ(middleEndPos, animSpeed);
+        }
+        if (TaskRingFG != null)
+        {
+            TaskRingFG.transform.DOLocalMoveZ(FGEndPos, animSpeed);
+            TaskRingFG.transform.DOScale(ogFGRingScale + new Vector3(FGRingEndScale, FGRingEndScale, 0), animSpeed);
+        }
     }
 
     public override void PointerExit()
     {
-        TaskRingBG.transform.DOScale(ogTaskRingScale, animSpeed);
+        if (TaskRingBG != null)
+            TaskRingBG.transform.DOScale(ogTaskRingScale, animSpeed);
 
-        // middleBG.transform.DOScale(ogMiddlBGScale, 0.8f);
-        // middleBG.transform.DOLocalMoveZ(0, 0.8f);
-
-        TaskRingFG.transform.DOLocalMoveZ(0, animSpeed);
-        TaskRingFG.transform.DOScale(ogFGRingScale, animSpeed);
+        if (middleBG != null)
+        {
+            middleBG.transform.DOScale(ogMiddlBGScale, animSpeed);
+            middleBG.transform.DOLocalMoveZ(0, animSpeed);
+        }
+        if (TaskRingFG != null)
+        {
+            TaskRingFG.transform.DOLocalMoveZ(0, animSpeed);
+            TaskRingFG.transform.DOScale(ogFGRingScale, animSpeed);
+        }
     }
-
-
-
 }

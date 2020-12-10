@@ -8,7 +8,7 @@ public class InteractUtilities : MonoBehaviour
     public static InteractUtilities instance;
     [SerializeField] BoxCollider boxArea;
     [SerializeField] GameObject area;
-    [SerializeField] LayerMask mask;
+    public LayerMask mask;
 
     private void Awake()
     {
@@ -56,12 +56,11 @@ public class InteractUtilities : MonoBehaviour
             while (Physics.CheckBox(newPos + new Vector3(0, 0.1f, 0), new Vector3(0.3f, 0.1f, 0.3f), Quaternion.identity, mask, QueryTriggerInteraction.Ignore))
             {
                 newPos = FindRandominArea();
-                yield return null;
             }
         }
 
         i.transform.DORotateQuaternion(newRot, GameSettings.instance.tweenSpeed);
-        yield return i.transform.DOMove(newPos,  GameSettings.instance.tweenSpeed);
+        yield return i.transform.DOMove(newPos, GameSettings.instance.tweenSpeed);
 
         if (colliderOff)
         {
@@ -90,7 +89,7 @@ public class InteractUtilities : MonoBehaviour
         }
     }
 
-    Vector3 FindRandominArea()
+    public Vector3 FindRandominArea()
     {
         return new Vector3(UnityEngine.Random.Range(area.transform.position.x - area.transform.localScale.x * boxArea.size.x * 0.5f,
                                                              area.transform.position.x + area.transform.localScale.x * boxArea.size.x * 0.5f),
@@ -99,7 +98,7 @@ public class InteractUtilities : MonoBehaviour
                                                              area.transform.position.z + area.transform.localScale.z * boxArea.size.z * 0.5f));
     }
 
-    bool FindCol<T>(IInteractable i, out T col)
+    public bool FindCol<T>(IInteractable i, out T col)
     {
         col = i.GetComponent<T>();
         return col != null;

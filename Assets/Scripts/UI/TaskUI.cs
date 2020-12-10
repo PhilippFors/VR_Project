@@ -7,7 +7,9 @@ public class TaskUI : MonoBehaviour
     public JobTask task;
     public Image image;
     public Image BG;
-    public TMPro.TextMeshProUGUI UiText;
+
+    public TMPro.TextMeshProUGUI counter;
+    public GameObject counterParent;
 
     [Header("FG Indicator Colors")]
     public Color fine;
@@ -19,28 +21,48 @@ public class TaskUI : MonoBehaviour
     public Color BGfine;
     public Color BGuhOh;
     public Color BGdanger;
-    private void Start()
+
+    private void Awake()
     {
-        UiText.text = task.information.name;
+        UpdateCounter();
+        task.updateThrowCounter += UpdateCounter;
+    }
+
+    private void OnDisable()
+    {
+        task.updateThrowCounter -= UpdateCounter;
     }
     void Update()
     {
-        image.fillAmount = task.currentTaskCompletionValue / task.maxTaskCompletionValue;
-
-        if (task.currentTaskCompletionValue >= 65f)
-        {
-            image.color = fine;
-            BG.color = BGfine;
-        }
-        else if (task.currentTaskCompletionValue < 65f && task.currentTaskCompletionValue >= 30f)
-        {
-            image.color = uhOh;
-            BG.color = BGuhOh;
-        }
+        if (task.throwable)
+            counterParent.SetActive(true);
         else
+            counterParent.SetActive(false);
+
+        if (image != null && BG != null)
         {
-            image.color = danger;
-            BG.color = BGdanger;
+            image.fillAmount = task.currentTaskCompletionValue / task.maxTaskCompletionValue;
+
+            if (task.currentTaskCompletionValue >= 65f)
+            {
+                image.color = fine;
+                BG.color = BGfine;
+            }
+            else if (task.currentTaskCompletionValue < 65f && task.currentTaskCompletionValue >= 30f)
+            {
+                image.color = uhOh;
+                BG.color = BGuhOh;
+            }
+            else
+            {
+                image.color = danger;
+                BG.color = BGdanger;
+            }
         }
+    }
+
+    void UpdateCounter()
+    {
+        counter.text = task.throwCounter.ToString();
     }
 }

@@ -4,29 +4,27 @@ using UnityEngine;
 
 public class InteractController : MonoBehaviour
 {
-    Ray ray;
-    public LayerMask raycastMasks;
+
+    [SerializeField] DragController dragger;
+    [SerializeField] UIManager uiManager;
+
     [SerializeField] IInteractable interactionObj;
     [SerializeField] Camera cam;
-    [SerializeField] DragController dragger;
 
     [SerializeField] float minholdtime = 0.5f;
 
     [Header("Throw settings")]
-    [SerializeField] float throwImpulse = 3f;
+    [SerializeField] float sweepSpeed = 7f;
     [SerializeField] FloatVariable maxForce;
     [SerializeField] FloatVariable currentForce;
-    [SerializeField] UnityEngine.UI.Slider throwSlider;
-
+    Ray ray;
+    public LayerMask raycastMasks;
     Touch touch;
     float touchtime;
 
     bool isHovering = false;
     bool isHolding = false;
     bool isDragging = false;
-
-    //Throwing
-
 
     void Update()
     {
@@ -68,7 +66,10 @@ public class InteractController : MonoBehaviour
         }
 
         if (isHolding)
+        {
+            uiManager.DisableIndicator();
             interactionObj.HoldAction();
+        }
 
         if (isDragging && interactionObj.draggable)
             Dragging();
@@ -111,6 +112,7 @@ public class InteractController : MonoBehaviour
                     touchtime += Time.deltaTime;
                     if (touchtime >= minholdtime)
                     {
+                        uiManager.DisableIndicator();
                         interactionObj.HoldAction();
 
                         isHolding = true;
@@ -134,7 +136,7 @@ public class InteractController : MonoBehaviour
 
     void ThrowInteraction()
     {
-        if (interactionObj != null & interactionObj.throwable & interactionObj.interactable)
+        if (interactionObj != null && interactionObj.throwable & interactionObj.interactable)
         {
             if (Input.touchCount > 0)
             {
@@ -162,28 +164,27 @@ public class InteractController : MonoBehaviour
     bool coActive = false;
     void PickUp()
     {
+        uiManager.DisableIndicator();
+
         dragger.Drag(interactionObj, interactionObj.rb, true);
         isDragging = true;
+
         if (!coActive)
         {
             StartCoroutine(ThrowForce());
             coActive = true;
         }
-
     }
 
     void LetGo()
     {
         interactionObj.rb.useGravity = true;
 
-        // Vector3 vel = interactionObj.GetComponent<Draggable>().velocity;
-        // Vector3 velNormal = vel.normalized;
         if (currentForce.Value >= 1f)
         {
             interactionObj.rb.AddForce(cam.transform.forward * currentForce.Value, ForceMode.Impulse);
             interactionObj.rb.angularVelocity = new Vector3(Random.Range(10f, 200f), Random.Range(10f, 200), Random.Range(10f, 200));
-            // interactionObj.rb.velocity = vel;
-            interactionObj.ThrowAction();
+            interactionObj.interactable = false;
         }
         else
         {
@@ -193,12 +194,11 @@ public class InteractController : MonoBehaviour
         coActive = false;
     }
 
-
     IEnumerator ThrowForce()
     {
         currentForce.Value = 0f;
-        throwSlider.value = 0f;
-        throwSlider.gameObject.SetActive(true);
+        uiManager.throwSlider.value = 0f;
+        uiManager.throwSlider.gameObject.SetActive(true);
         bool tick = true;
         while (isDragging)
         {
@@ -208,14 +208,14 @@ public class InteractController : MonoBehaviour
                 tick = false;
 
             if (tick)
-                currentForce.Value += Time.deltaTime * 6f;
+                currentForce.Value += Time.deltaTime * sweepSpeed;
             else
-                currentForce.Value -= Time.deltaTime * 6f;
+                currentForce.Value -= Time.deltaTime * sweepSpeed;
 
             yield return null;
         }
 
-        throwSlider.gameObject.SetActive(false);
+        uiManager.throwSlider.gameObject.SetActive(false);
     }
     #endregion
 
@@ -249,6 +249,7 @@ public class InteractController : MonoBehaviour
 
     void Dragging()
     {
+        uiManager.DisableIndicator();
         dragger.Drag(interactionObj, interactionObj.rb, false);
         isDragging = true;
     }
@@ -258,14 +259,14 @@ public class InteractController : MonoBehaviour
     {
         if (interactionObj.destination != null && interactionObj.destination.onDestination)
         {
-            if (!dragger.currentDest.active && dragger.currentDest.pairObj.name.Equals(interactionObj.name))
+            if (!interactionObj.destination.active && interactionObj.destination.pairObj.name.Equals(interactionObj.name))
             {
-                interactionObj.transform.position = dragger.currentDest.snapPosition;
-                interactionObj.transform.rotation = dragger.currentDest.snapRot;
+                interactionObj.transform.position = interactionObj.destination.snapPosition;
+                interactionObj.transform.rotation = interactionObj.destination.snapRot;
                 dragger.StopDrag(interactionObj.rb);
                 interactionObj.DragAction();
-                dragger.currentDest.WaitForCompletionStart();
-                dragger.currentDest = null;
+                interactionObj.destination.WaitForCompletionStart();
+                interactionObj.destination = null;
             }
             else
             {
@@ -296,43 +297,42 @@ public class InteractController : MonoBehaviour
         {
 
             var inter = hit.transform.gameObject.GetComponent<IInteractable>();
-            if (inter != null)
+            if (inter != null && inter.interactable)
             {
-                if (inter.interactable)
+                if (interactionObj == null)
                 {
-                    if (interactionObj == null)
+                    interactionObj = inter;
+                    if (!isHovering & !isHolding & !isDragging)
                     {
-                        interactionObj = inter;
-                        if (!isHovering & !isHolding & !isDragging)
-                        {
-                            interactionObj.PointerEnter();
-                            isHovering = true;
-                        }
+                        uiManager.EnableIndicator(interactionObj);
+                        interactionObj.PointerEnter();
+                        isHovering = true;
                     }
                 }
             }
             else
             {
-                if (!isHolding & !isDragging)
-                {
-                    if (interactionObj != null)
-                        interactionObj.PointerExit();
-
-                    isHovering = false;
-                    interactionObj = null;
-                }
+                EscapeObject();
             }
         }
         else
         {
-            if (!isHolding & !isDragging)
-            {
-                if (interactionObj != null)
-                    interactionObj.PointerExit();
+            EscapeObject();
+        }
+    }
 
-                isHovering = false;
-                interactionObj = null;
+    void EscapeObject()
+    {
+        if (!isHolding & !isDragging)
+        {
+            if (interactionObj != null)
+            {
+                uiManager.DisableIndicator();
+                interactionObj.PointerExit();
             }
+
+            isHovering = false;
+            interactionObj = null;
         }
     }
 }

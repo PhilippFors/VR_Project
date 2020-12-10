@@ -18,6 +18,14 @@ public abstract class IInteractable : MonoBehaviour
 
     //When true, can be interacted with
     public bool interactable;
+
+    [Header("Throwcounter settings")]
+    public int throwCounter;
+    [SerializeField] protected int maxThrows;
+    public float waitCounterReset;
+    public float waitPosReset;
+    public bool isColliding;
+
     [HideInInspector] public Vector3 lastPos;
     [HideInInspector] public Quaternion lastRot;
     [HideInInspector] public Vector3 ogPos;
@@ -33,6 +41,7 @@ public abstract class IInteractable : MonoBehaviour
     {
         interactable = true;
     }
+
     public virtual void HoldAction()
     {
 
@@ -64,5 +73,21 @@ public abstract class IInteractable : MonoBehaviour
     public virtual void PointerClick()
     {
 
+    }
+
+    public virtual void ResetLastPosition()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        transform.position = lastPos;
+        transform.rotation = lastRot;
+    }
+
+    public virtual void ResetOgPosition()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        transform.position = ogPos;
+        transform.rotation = ogRot;
     }
 }
