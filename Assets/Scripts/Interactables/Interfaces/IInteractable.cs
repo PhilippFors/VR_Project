@@ -24,7 +24,6 @@ public abstract class IInteractable : MonoBehaviour
     [SerializeField] protected int maxThrows;
     public float waitCounterReset;
     public float waitPosReset;
-    public bool isColliding;
 
     [HideInInspector] public Vector3 lastPos;
     [HideInInspector] public Quaternion lastRot;
@@ -39,6 +38,7 @@ public abstract class IInteractable : MonoBehaviour
 
     private void Start()
     {
+        throwCounter = maxThrows;
         interactable = true;
     }
 

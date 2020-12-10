@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class JobTask : IInteractable
+public class JobTask : IInteractable
 {
     [HideInInspector] public float clickStressValue, holdStressValue, lookStressValue, dragStressValue, throwStressValue;
     [HideInInspector] public float clickCompletionValue, holdCompletionValue, lookCompletionValue, dragCompletionValue, throwCompletionValue;
@@ -186,6 +186,9 @@ public abstract class JobTask : IInteractable
 
     protected IEnumerator TaskCompletionCountdown()
     {
+        if (completionReductionValue == 0)
+            yield break;
+
         yield return new WaitForSeconds(waitForReduction);
         while (currentTaskCompletionValue >= 0)
         {
