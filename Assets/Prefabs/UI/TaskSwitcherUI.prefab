@@ -28,9 +28,9 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3698946182512403178}
-  m_LocalRotation: {x: 0.052678797, y: 0.48528856, z: -0.029307794, w: 0.8722735}
+  m_LocalRotation: {x: 0.052678104, y: 0.4852911, z: -0.029307613, w: 0.87227213}
   m_LocalPosition: {x: 0, y: 0, z: -0.2575}
-  m_LocalScale: {x: 0.011659948, y: 0.011659946, z: 1.8649}
+  m_LocalScale: {x: 0.015686892, y: 0.015686888, z: 1.1385}
   m_Children:
   - {fileID: 4693775188674636382}
   - {fileID: 4693775187481453926}
@@ -147,11 +147,11 @@ MonoBehaviour:
   destination: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
   task: {fileID: 0}
-  taskText: {fileID: 0}
+  taskText: {fileID: 4693775187481453925}
   interact:
-  - C
-  - H
-  - L
+  - 
+  - 
+  - r
   - D
   - T
 --- !u!114 &3698946182512403181

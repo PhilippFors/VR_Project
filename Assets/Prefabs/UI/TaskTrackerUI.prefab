@@ -187,7 +187,7 @@ RectTransform:
   m_GameObject: {fileID: 784911950078711166}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.027903715, y: 0.027903708, z: 1}
+  m_LocalScale: {x: 0.035542075, y: 0.035542067, z: 1.2737399}
   m_Children:
   - {fileID: 784911951151818543}
   - {fileID: 3804305253378599996}
@@ -534,7 +534,7 @@ GameObject:
   - component: {fileID: 784911951451951400}
   - component: {fileID: 784911951451951403}
   m_Layer: 5
-  m_Name: TextBG
+  m_Name: ThrowBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

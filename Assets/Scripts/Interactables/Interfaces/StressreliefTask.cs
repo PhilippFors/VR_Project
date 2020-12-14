@@ -10,8 +10,11 @@ public abstract class StressreliefTask : IInteractable
     {
         ogPos = transform.position;
         ogRot = transform.rotation;
+
+        throwCounter = maxThrows;
+        interactable = true;
     }
-    
+
     public override void HoldAction()
     {
         if (!holdable)

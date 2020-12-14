@@ -26,7 +26,11 @@ public class JobTask : IInteractable
         ogRot = gameObject.transform.rotation;
         currentTaskCompletionValue = Random.Range(35f, 90f);
         StartTaskReduction();
+
+        throwCounter = maxThrows;
+        interactable = true;
     }
+
 
     void Update()
     {
@@ -35,8 +39,19 @@ public class JobTask : IInteractable
             AddCompletionOverTime(lookCompletionValue);
             AddStressOverTime(lookStressValue);
         }
+        FAIL();
     }
 
+
+    public void FAIL()
+    {
+        if (currentTaskCompletionValue <= 0)
+            if (!GameSettings.instance.godMode)
+            {
+                Debug.Log("DIE");
+                // hecking die
+            }
+    }
     public override void HoldAction()
     {
         if (!holdable)
@@ -172,7 +187,7 @@ public class JobTask : IInteractable
             StopCoroutine(coroutine);
     }
 
-    protected void StartTaskReduction()
+    public void StartTaskReduction()
     {
         coroutine = StartCoroutine(TaskCompletionCountdown());
     }

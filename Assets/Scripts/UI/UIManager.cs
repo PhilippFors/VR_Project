@@ -27,7 +27,15 @@ public class UIManager : MonoBehaviour
         else if (interactionObj.throwable)
             t.text = "Throw";
 
-        interactableIndicator.transform.position = interactionObj.transform.position + new Vector3(0, 0.4f, 0);
+        if (Physics.CheckSphere(interactionObj.transform.position + new Vector3(0, 0.4f, 0), 0.02f))
+        {
+            interactableIndicator.transform.position = interactionObj.transform.position + new Vector3(0, 0.6f, 0);
+        }
+        else
+        {
+            interactableIndicator.transform.position = interactionObj.transform.position + new Vector3(0, 0.4f, 0);
+        }
+
         interactableIndicator.transform.rotation = Quaternion.LookRotation(-(cam.transform.position - interactableIndicator.transform.position));
         interactableIndicator.SetActive(true);
     }

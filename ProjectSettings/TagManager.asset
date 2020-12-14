@@ -15,10 +15,10 @@ TagManager:
   - 
   - 
   - Interactable
-  - NonInteractable
-  - Surface
-  - Drag Destination
   - 
+  - 
+  - Drag Destination
+  - Room
   - 
   - 
   - 

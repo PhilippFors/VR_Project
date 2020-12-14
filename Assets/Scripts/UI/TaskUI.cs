@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class TaskUI : MonoBehaviour
 {
     public JobTask task;
     public Image image;
     public Image BG;
 
-    public TMPro.TextMeshProUGUI counter;
+    public TextMeshProUGUI counter;
     public GameObject counterParent;
 
     [Header("FG Indicator Colors")]
@@ -35,9 +36,14 @@ public class TaskUI : MonoBehaviour
     void Update()
     {
         if (task.throwable)
+        {
             counterParent.SetActive(true);
+            UpdateCounter();
+        }
         else
+        {
             counterParent.SetActive(false);
+        }
 
         if (image != null && BG != null)
         {

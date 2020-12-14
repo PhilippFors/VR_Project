@@ -31,7 +31,13 @@ public class StressManager : MonoBehaviour
         currentStress.Value += value * penaltyMultiplier;
 
         if (currentStress.Value >= maxStress.Value)
-            Debug.Log("You died");
+        {
+            if (!GameSettings.instance.godMode)
+            {
+                Debug.Log("DIE");
+                //DIE
+            }
+        }
         else if (currentStress.Value < 0)
             currentStress.Value = 0;
     }
@@ -66,5 +72,20 @@ public class StressManager : MonoBehaviour
     void UpdatePenaltyUI()
     {
         ui.text = "x" + penaltyMultiplier.ToString("F");
+    }
+
+    public void ResetStress()
+    {
+        currentStress.Value = 0;
+    }
+
+    public void SetAllTasksFull()
+    {
+        JobTask[] tasks = GameObject.FindObjectsOfType<JobTask>();
+        foreach (JobTask task in tasks)
+        {
+            task.currentTaskCompletionValue = 100;
+            task.StartTaskReduction();
+        }
     }
 }

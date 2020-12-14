@@ -36,12 +36,6 @@ public abstract class IInteractable : MonoBehaviour
     [HideInInspector] public Vector3 velocity;
     [HideInInspector] public Rigidbody rb => GetComponent<Rigidbody>();
 
-    private void Start()
-    {
-        throwCounter = maxThrows;
-        interactable = true;
-    }
-
     public virtual void HoldAction()
     {
 

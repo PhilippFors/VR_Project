@@ -10,32 +10,97 @@ public class UITaskSwitcher : IInteractable
 
     [Tooltip("[C]lick -> [H]old -> [L]ook -> [D]rag -> [T]hrow -> ...")]
     [SerializeField] string[] interact = { "C", "H", "L", "D", "T" };
-    
+    string originalT;
+    [SerializeField] bool stopCoroutine;
     private void Start()
     {
         if (task.clickable)
         {
             taskText.text = click;
+            originalT = click;
         }
         else if (task.holdable)
         {
             taskText.text = hold;
+            originalT = hold;
         }
         else if (task.lookable)
         {
             taskText.text = look;
+            originalT = look;
         }
         else if (task.draggable)
         {
             taskText.text = drag;
+            originalT = drag;
         }
         else if (task.throwable)
         {
             taskText.text = throwing;
+            originalT = throwing;
+        }
+    }
+
+    bool check = false;
+    private void Update()
+    {
+        if (StressManager.instance.currentStress.Value >= 70f)
+        {
+            if (!check)
+                GetComponent<Canvas>().enabled = true;
+
+            check = true;
+        }
+        else
+        {
+            if (check)
+            {
+                task.clickable = false;
+                task.holdable = false;
+                task.lookable = false;
+                task.draggable = false;
+                task.throwable = false;
+
+                if (originalT.Equals(click))
+                {
+                    task.clickable = true;
+                    taskText.text = click;
+                }
+                else if (originalT.Equals(hold))
+                {
+                    task.holdable = true;
+                    taskText.text = hold;
+                }
+
+                else if (originalT.Equals(look))
+                {
+                    taskText.text = look;
+                    task.lookable = true;
+                }
+
+                else if (originalT.Equals(drag))
+                {
+                    task.draggable = true;
+                    taskText.text = drag;
+                }
+                else if (originalT.Equals(throwing))
+                {
+                    task.throwable = true;
+                    taskText.text = throwing;
+                }
+
+                GetComponent<Canvas>().enabled = false;
+                check = false;
+            }
         }
     }
 
     public override void PointerClick()
+    {
+        CheckTask();
+    }
+
+    void CheckTask()
     {
         if (task.clickable)
         {
@@ -77,7 +142,6 @@ public class UITaskSwitcher : IInteractable
                     task.rb.useGravity = false;
                     task.holdable = true;
                     taskText.text = hold;
-
                 }
                 else if (interact[i].Equals(look))
                 {

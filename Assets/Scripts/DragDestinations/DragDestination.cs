@@ -10,15 +10,24 @@ public class DragDestination : MonoBehaviour
     public IInteractable pairObj;
 
     [SerializeField] Transform snapObj;
-    public Vector3 snapPosition => snapObj.transform.position;
-    public Quaternion snapRot => snapObj.transform.rotation;
+    public Vector3 snapPosition;
+    public Quaternion snapRot;
 
     [SerializeField] float completionTime = 3f;
     [SerializeField] float floatSpeed = 9f;
-    
+
     private void Start()
     {
-        // pairObj.GetComponent<Draggable>().destination = this;
+        if (snapObj == null)
+        {
+            snapPosition = gameObject.transform.position;
+            snapRot = gameObject.transform.rotation;
+        }
+        else
+        {
+            snapPosition = snapObj.transform.position;
+            snapRot = snapObj.transform.rotation;
+        }
     }
 
     public void WaitForCompletionStart()
@@ -43,7 +52,7 @@ public class DragDestination : MonoBehaviour
         if (other.gameObject.GetComponent<IInteractable>().draggable)
         {
             onDestination = true;
-            other.gameObject.GetComponent<Draggable>().destination = this;
+            other.gameObject.GetComponent<IInteractable>().destination = this;
         }
     }
 
@@ -52,7 +61,7 @@ public class DragDestination : MonoBehaviour
         if (other.gameObject.GetComponent<IInteractable>().draggable)
         {
             onDestination = false;
-            other.gameObject.GetComponent<Draggable>().destination = null;
+            other.gameObject.GetComponent<IInteractable>().destination = null;
         }
     }
 }

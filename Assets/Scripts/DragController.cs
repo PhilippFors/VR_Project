@@ -59,7 +59,7 @@ public class DragController : MonoBehaviour
             FindDestination(obj);
         }
 
-        obj.GetComponent<Draggable>().velocity = newPos - oldPos;
+        obj.GetComponent<IInteractable>().velocity = newPos - oldPos;
         obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, newRot, throwable ? Time.deltaTime * (GameSettings.instance.dragFloatspeed + 2) : Time.deltaTime * GameSettings.instance.dragFloatspeed);
         obj.transform.position = Vector3.Lerp(obj.transform.position, newPos, throwable ? Time.deltaTime * (GameSettings.instance.dragFloatspeed + 2) : Time.deltaTime * GameSettings.instance.dragFloatspeed);
     }
@@ -67,19 +67,20 @@ public class DragController : MonoBehaviour
     void FindDestination(IInteractable obj)
     {
         Vector3 pos = Vector3.zero;
-        var draggable = obj.GetComponent<Draggable>();
+        var draggable = obj.GetComponent<IInteractable>();
 
+        DisableCol(obj);
         if (draggable.destination != null)
         {
             currentDest = draggable.destination;
 
             if (draggable.destination.onDestination)
             {
-                if (checkForCols)
-                {
-                    DisableCol(obj);
-                    checkForCols = false;
-                }
+                // if (checkForCols)
+                // {
+
+                checkForCols = false;
+                // }
 
                 newPos = currentDest.snapPosition;
                 newRot = currentDest.snapRot;
@@ -117,6 +118,8 @@ public class DragController : MonoBehaviour
         else if (Physics.Raycast(ray, out hit, GameSettings.instance.maxRayDist, destinationMask))
         {
             currentDest = hit.transform.GetComponent<DragDestination>();
+            draggable.destination = currentDest;
+            currentDest.onDestination = true;
             newPos = currentDest.snapPosition;
             newRot = currentDest.snapRot;
         }
