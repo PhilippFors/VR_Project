@@ -4,9 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameObject interactableIndicator;
     public Camera cam;
+
+    [Header("Throw Slider")]
     public Slider throwSlider;
+
+    [Header("Interactable Indicator")]
+    [SerializeField] GameObject interactableIndicator;
+
+    [Header("Clock")]
+    public TMPro.TextMeshProUGUI minuteText;
+    public TMPro.TextMeshProUGUI secondText;
+
+    private void Start()
+    {
+        MyEventSystem.instance.updateSecond += UpdateClockUISecond;
+        MyEventSystem.instance.updateMinute += UpdateClockUIMinute;
+    }
 
     #region Interactable Indicator
     public void EnableIndicator(IInteractable interactionObj)
@@ -51,4 +65,24 @@ public class UIManager : MonoBehaviour
         DisableIndicator();
     }
     #endregion
+
+    void UpdateClockUISecond(int second)
+    {
+        if (second < 10)
+            secondText.text = "0" + second.ToString();
+        else
+            secondText.text = second.ToString();
+    }
+    void UpdateClockUIMinute(int minute)
+    {
+        if (minute < 10)
+            minuteText.text = "0" + minute.ToString();
+        else
+            minuteText.text = minute.ToString();
+    }
+
+    public void FlashClock()
+    {
+
+    }
 }
