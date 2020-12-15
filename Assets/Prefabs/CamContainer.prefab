@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4543488584503678926}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Helper_Side
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4543488585533475394}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Helper_Close
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,13 +85,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4543488585533475395}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.00000035762784}
+  m_LocalRotation: {x: -0.00000006915499, y: -0.98112565, z: 0.19337139, w: -0.00000035087783}
   m_LocalPosition: {x: 0, y: -0.164, z: 0.2666}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4543488586110763053}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: -179.99998, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.299002, y: -179.99998, z: 0}
 --- !u!1 &4543488586110763042
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,10 +312,6 @@ PrefabInstance:
     - target: {fileID: 482300, guid: 60270cf52a5e94998a5a335989159738, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 723926960, guid: 60270cf52a5e94998a5a335989159738, type: 3}
-      propertyPath: reticleSegments
-      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60270cf52a5e94998a5a335989159738, type: 3}

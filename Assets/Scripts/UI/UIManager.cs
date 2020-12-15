@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI minuteText;
     public TMPro.TextMeshProUGUI secondText;
 
+    public GameObject deathScreen;
+
     private void Start()
     {
         MyEventSystem.instance.updateSecond += UpdateClockUISecond;
@@ -84,5 +86,14 @@ public class UIManager : MonoBehaviour
     public void FlashClock()
     {
 
+    }
+
+    public void TurnOnDeathScreen()
+    {
+        deathScreen.SetActive(true);
+    }
+    public void ToggleDeathScreen()
+    {
+        deathScreen.SetActive(!deathScreen.activeSelf);
     }
 }

@@ -48,8 +48,7 @@ public class JobTask : IInteractable
         if (currentTaskCompletionValue <= 0)
             if (!GameSettings.instance.godMode)
             {
-                Debug.Log("DIE");
-                // hecking die
+                GameManager.instance.Death();
             }
     }
     public override void HoldAction()

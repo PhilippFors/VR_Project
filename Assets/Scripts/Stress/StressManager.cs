@@ -34,8 +34,7 @@ public class StressManager : MonoBehaviour
         {
             if (!GameSettings.instance.godMode)
             {
-                Debug.Log("DIE");
-                //DIE
+                GameManager.instance.Death();
             }
         }
         else if (currentStress.Value < 0)

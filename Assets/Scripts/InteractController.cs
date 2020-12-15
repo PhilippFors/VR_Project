@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class InteractController : MonoBehaviour
 {
-
     [SerializeField] DragController dragger;
     [SerializeField] UIManager uiManager;
-
     [SerializeField] IInteractable interactionObj;
     [SerializeField] Camera cam;
 
@@ -28,6 +26,9 @@ public class InteractController : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.instance.dead)
+            return;
+
         FindObject();
 
         // HoldSimulation();
