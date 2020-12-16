@@ -33,8 +33,8 @@ public class InteractController : MonoBehaviour
 
         // HoldSimulation();
 
-        ThrowInteraction();
         CheckForHoldAction();
+        ThrowInteraction();
         DragInteraction();
     }
 

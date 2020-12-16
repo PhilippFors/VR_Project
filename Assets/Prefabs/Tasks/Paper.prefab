@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 258706772823550441}
   - component: {fileID: 258706772823550446}
   - component: {fileID: 258706772823550447}
-  - component: {fileID: 258706772823550453}
+  - component: {fileID: 258706771419776584}
   m_Layer: 8
   m_Name: Paper
   m_TagString: Untagged
@@ -185,9 +185,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258706772823550444}
-  m_LocalRotation: {x: -0.00000008748468, y: 0.70267034, z: 0.71151567, w: 0.00000008195639}
+  m_LocalRotation: {x: -0.0000001973675, y: 0.7026748, z: 0.71151114, w: 0.00000019984945}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.28112203, y: 0.45215905, z: 0.001970018}
+  m_LocalScale: {x: 0.28112227, y: 0.4521593, z: 0.001970019}
   m_Children:
   - {fileID: 258706773074421408}
   m_Father: {fileID: 0}
@@ -268,7 +268,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &258706772823550453
+--- !u!114 &258706771419776584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 258706772823550444}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bef9863fdaf0c42ad0ba5daaa96b06, type: 3}
+  m_Script: {fileID: 11500000, guid: 5357ae0d867adbf4cbfcbbdfe0419ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   information:
@@ -290,9 +290,9 @@ MonoBehaviour:
   throwable: 0
   interactable: 0
   throwCounter: 0
-  maxThrows: 3
-  waitCounterReset: 40
-  waitPosReset: 6
+  maxThrows: 2
+  waitCounterReset: 50
+  waitPosReset: 3
   lastPos: {x: 0, y: 0, z: 0}
   lastRot: {x: 0, y: 0, z: 0, w: 0}
   ogPos: {x: 0, y: 0, z: 0}
@@ -303,16 +303,29 @@ MonoBehaviour:
   holdStressValue: 0
   lookStressValue: 0
   dragStressValue: 6
-  throwStressValue: -10
+  throwStressValue: -15
   clickCompletionValue: 0
   holdCompletionValue: 0
   lookCompletionValue: 0
   dragCompletionValue: 16
-  throwCompletionValue: 11
+  throwCompletionValue: 13
   currentTaskCompletionValue: 0
   maxTaskCompletionValue: 100
   completionReductionValue: 1
   waitForReduction: 2
+  texts:
+  - Please
+  - help
+  - I'm
+  - stuck
+  - in
+  - the
+  - scanner
+  - it hurts
+  - it hurts
+  - please
+  - itttt hruts
+  paperText: {fileID: 258706771274101535}
 --- !u!1 &258706773074421412
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,7 +339,7 @@ GameObject:
   - component: {fileID: 258706773074421414}
   - component: {fileID: 258706773074421415}
   m_Layer: 2
-  m_Name: REading
+  m_Name: papertext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

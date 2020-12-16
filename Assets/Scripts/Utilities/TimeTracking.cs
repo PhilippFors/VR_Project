@@ -22,7 +22,7 @@ public class TimeTracking : MonoBehaviour
 
     IEnumerator Clock()
     {
-        while (minute > 0 && second > 0)
+        while (true)
         {
             temp -= Time.deltaTime;
             if (temp <= 0)
@@ -37,7 +37,11 @@ public class TimeTracking : MonoBehaviour
                 minute--;
                 second = 59;
                 MyEventSystem.instance.UpdateMinute(minute);
+                MyEventSystem.instance.UpdateSecond(second);
             }
+
+            if (minute == 0 && second == 0)
+                yield break;
 
             yield return null;
         }

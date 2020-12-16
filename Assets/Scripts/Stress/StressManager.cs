@@ -9,7 +9,7 @@ public class StressManager : MonoBehaviour
 
     public static StressManager instance;
 
-    public TMPro.TextMeshProUGUI ui;
+    public TMPro.TextMeshProUGUI penaltyUI;
     public float penaltyMultiplier = 1.0f;
     public float penaltyAmount;
     public float penaltyTime;
@@ -70,7 +70,7 @@ public class StressManager : MonoBehaviour
 
     void UpdatePenaltyUI()
     {
-        ui.text = "x" + penaltyMultiplier.ToString("F");
+        penaltyUI.text = "x" + penaltyMultiplier.ToString("F");
     }
 
     public void ResetStress()

@@ -41,60 +41,68 @@ public class UITaskSwitcher : IInteractable
         }
     }
 
+    Coroutine coroutine;
     bool check = false;
     private void Update()
     {
         if (StressManager.instance.currentStress.Value >= 70f)
         {
             if (!check)
+            {
                 GetComponent<Canvas>().enabled = true;
-
+                if (coroutine != null)
+                    StopCoroutine(coroutine);
+            }
             check = true;
         }
         else
         {
             if (check)
             {
-                task.clickable = false;
-                task.holdable = false;
-                task.lookable = false;
-                task.draggable = false;
-                task.throwable = false;
-
-                if (originalT.Equals(click))
-                {
-                    task.clickable = true;
-                    taskText.text = click;
-                }
-                else if (originalT.Equals(hold))
-                {
-                    task.holdable = true;
-                    taskText.text = hold;
-                }
-
-                else if (originalT.Equals(look))
-                {
-                    taskText.text = look;
-                    task.lookable = true;
-                }
-
-                else if (originalT.Equals(drag))
-                {
-                    task.draggable = true;
-                    taskText.text = drag;
-                }
-                else if (originalT.Equals(throwing))
-                {
-                    task.throwable = true;
-                    taskText.text = throwing;
-                }
-
-                GetComponent<Canvas>().enabled = false;
+                coroutine = StartCoroutine(Taskcountdown());
                 check = false;
             }
         }
     }
+    IEnumerator Taskcountdown()
+    {
+        yield return new WaitForSeconds(10f);
+        task.clickable = false;
+        task.holdable = false;
+        task.lookable = false;
+        task.draggable = false;
+        task.throwable = false;
 
+        if (originalT.Equals(click))
+        {
+            task.clickable = true;
+            taskText.text = click;
+        }
+        else if (originalT.Equals(hold))
+        {
+            task.holdable = true;
+            taskText.text = hold;
+        }
+
+        else if (originalT.Equals(look))
+        {
+            taskText.text = look;
+            task.lookable = true;
+        }
+
+        else if (originalT.Equals(drag))
+        {
+            task.draggable = true;
+            taskText.text = drag;
+        }
+        else if (originalT.Equals(throwing))
+        {
+            task.throwable = true;
+            taskText.text = throwing;
+        }
+
+        GetComponent<Canvas>().enabled = false;
+    }
     public override void PointerClick()
     {
         CheckTask();

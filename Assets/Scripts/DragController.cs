@@ -76,12 +76,6 @@ public class DragController : MonoBehaviour
 
             if (draggable.destination.onDestination)
             {
-                // if (checkForCols)
-                // {
-
-                checkForCols = false;
-                // }
-
                 newPos = currentDest.snapPosition;
                 newRot = currentDest.snapRot;
 

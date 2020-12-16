@@ -5,8 +5,10 @@ using UnityEngine;
 public class TurnUI : MonoBehaviour
 {
     [SerializeField] Camera mainCam;
+
     void Start()
     {
+        mainCam = Camera.main;
         StartCoroutine(lookatCam());
     }
 

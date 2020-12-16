@@ -20,7 +20,7 @@ public class JobTask : IInteractable
 
     public event System.Action updateThrowCounter;
 
-    private void Start()
+    public override void INIT()
     {
         ogPos = gameObject.transform.position;
         ogRot = gameObject.transform.rotation;

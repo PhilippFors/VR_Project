@@ -16,29 +16,29 @@ public class TaskSpawner : MonoBehaviour
 
     void CountUp(int second)
     {
-        timeCount++;
-
-        if (timeCount == nextTaskCount)
+        if (timeCount == nextTaskCount & second != -1)
         {
             AddTask();
             timeCount = 0;
         }
+        timeCount++;
     }
-    
+
     void AddTask()
     {
         if (currentArrIndex < nextTasks.Length)
         {
             Vector3 newPos = InteractUtilities.instance.FindRandominArea();
-            if (Physics.CheckBox(newPos + new Vector3(0, 0.1f, 0), new Vector3(0.3f, 0.1f, 0.3f), Quaternion.identity, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Ignore))
+            if (Physics.CheckBox(newPos + new Vector3(0, 0.25f, 0), new Vector3(0.3f, 0.5f, 0.3f), Quaternion.identity, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Ignore))
             {
-                while (Physics.CheckBox(newPos + new Vector3(0, 0.1f, 0), new Vector3(0.3f, 0.1f, 0.3f), Quaternion.identity, InteractUtilities.instance.mask, QueryTriggerInteraction.Ignore))
+                while (Physics.CheckBox(newPos + new Vector3(0, 0.26f, 0), new Vector3(0.3f, 0.5f, 0.3f), Quaternion.identity, InteractUtilities.instance.mask, QueryTriggerInteraction.Ignore))
                 {
                     newPos = InteractUtilities.instance.FindRandominArea();
-                    Debug.Log("Find me that area");
                 }
             }
-            Instantiate(nextTasks[currentArrIndex], newPos, Quaternion.Euler(0, Random.Range(0f, 20f), 0));
+
+            GameObject obj = Instantiate(nextTasks[currentArrIndex], newPos + new Vector3(0, 0.3f, 0), Quaternion.identity);
+            obj.transform.LookAt(new Vector3(Camera.main.transform.position.x, obj.transform.position.y, Camera.main.transform.position.z));
 
             currentArrIndex++;
         }

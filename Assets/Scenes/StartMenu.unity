@@ -236,39 +236,60 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.001970019
       objectReference: {fileID: 0}
-    - target: {fileID: 258706772823550453, guid: 27fd9e4d47472cd4db1cd8341df80012,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 258706773074421409, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1474922783}
+    - target: {fileID: 258706771419776584, guid: 27fd9e4d47472cd4db1cd8341df80012,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 0
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
+        type: 3}
+      propertyPath: m_text
+      value: 'There
+
+        is
+
+        no
+
+        escape'
+      objectReference: {fileID: 0}
+    - target: {fileID: 258706771274101535, guid: 27fd9e4d47472cd4db1cd8341df80012,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 258706772823550453, guid: 27fd9e4d47472cd4db1cd8341df80012,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -279,18 +300,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 14400282}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &14400284 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 258706772823550453, guid: 27fd9e4d47472cd4db1cd8341df80012,
-    type: 3}
-  m_PrefabInstance: {fileID: 14400282}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0bef9863fdaf0c42ad0ba5daaa96b06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &59641943
 GameObject:
   m_ObjectHideFlags: 0
@@ -2875,14 +2884,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1474922783}
-    - target: {fileID: 1433628035565817449, guid: f5833e07485ac2d4b9b583662a62f4c1,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7933255556126448616, guid: f5833e07485ac2d4b9b583662a62f4c1,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1433628035565817449, guid: f5833e07485ac2d4b9b583662a62f4c1,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2030208962905676155, guid: f5833e07485ac2d4b9b583662a62f4c1,
@@ -3078,7 +3087,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 0
   onDestination: 0
-  pairObj: {fileID: 14400284}
+  pairObj: {fileID: 0}
   snapObj: {fileID: 1731836127}
   snapPosition: {x: 0, y: 0, z: 0}
   snapRot: {x: 0, y: 0, z: 0, w: 0}
@@ -5982,7 +5991,8 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: fa053b6487722ee44b78c1b2edf72c36, type: 3}
 --- !u!4 &1857683148 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2992800691032418886, guid: fa053b6487722ee44b78c1b2edf72c36,
+    type: 3}
   m_PrefabInstance: {fileID: 1857683147}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1865737832
@@ -6608,6 +6618,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TransitionCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1902550137351596875, guid: c8b060e4b59708b49bdc4daa9b14a3bb,
+        type: 3}
+      propertyPath: m_PlayAutomatically
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1902550137710943529, guid: c8b060e4b59708b49bdc4daa9b14a3bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6741,11 +6756,6 @@ PrefabInstance:
     - target: {fileID: 1902550137351596868, guid: c8b060e4b59708b49bdc4daa9b14a3bb,
         type: 3}
       propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1902550137351596875, guid: c8b060e4b59708b49bdc4daa9b14a3bb,
-        type: 3}
-      propertyPath: m_PlayAutomatically
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
