@@ -29,15 +29,16 @@ public class TaskSpawner : MonoBehaviour
         if (currentArrIndex < nextTasks.Length)
         {
             Vector3 newPos = InteractUtilities.instance.FindRandominArea();
-            if (Physics.CheckBox(newPos + new Vector3(0, 0.25f, 0), new Vector3(0.3f, 0.5f, 0.3f), Quaternion.identity, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Ignore))
+            if (Physics.CheckBox(newPos + new Vector3(0, 0.2f, 0), new Vector3(0.3f, 0.35f, 0.3f), Quaternion.identity, LayerMask.GetMask("Interactable"), QueryTriggerInteraction.Ignore))
             {
-                while (Physics.CheckBox(newPos + new Vector3(0, 0.26f, 0), new Vector3(0.3f, 0.5f, 0.3f), Quaternion.identity, InteractUtilities.instance.mask, QueryTriggerInteraction.Ignore))
+                for (int i = 0; i < 10; i++)
                 {
-                    newPos = InteractUtilities.instance.FindRandominArea();
+                    if (Physics.CheckBox(newPos + new Vector3(0, 0.2f, 0), new Vector3(0.3f, 0.38f, 0.3f), Quaternion.identity, InteractUtilities.instance.mask, QueryTriggerInteraction.Ignore))
+                        newPos = InteractUtilities.instance.FindRandominArea();
                 }
             }
 
-            GameObject obj = Instantiate(nextTasks[currentArrIndex], newPos + new Vector3(0, 0.3f, 0), Quaternion.identity);
+            GameObject obj = Instantiate(nextTasks[currentArrIndex], newPos + new Vector3(0, 0.1f, 0), Quaternion.identity);
             obj.transform.LookAt(new Vector3(Camera.main.transform.position.x, obj.transform.position.y, Camera.main.transform.position.z));
 
             currentArrIndex++;

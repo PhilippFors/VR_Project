@@ -1562,8 +1562,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.96, y: 0.021694064, z: 1.57}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.8709307, y: 0.021694064, z: 1.3142475}
+  m_Center: {x: -0.08466935, y: 0, z: -0.06005162}
 --- !u!4 &744326931
 Transform:
   m_ObjectHideFlags: 0
@@ -1572,11 +1572,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 744326929}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.636, y: 1.4132, z: 2.65}
+  m_LocalPosition: {x: 0.636, y: 1.415, z: 2.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &758435700
 GameObject:
@@ -3660,7 +3660,7 @@ Transform:
   - {fileID: 4885287460554689492}
   - {fileID: 32699720}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1741038689
 MonoBehaviour:
@@ -4999,7 +4999,7 @@ PrefabInstance:
     - target: {fileID: 1902550137710943529, guid: c8b060e4b59708b49bdc4daa9b14a3bb,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1902550137710943529, guid: c8b060e4b59708b49bdc4daa9b14a3bb,
         type: 3}
@@ -5206,6 +5206,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 120786058}
+    - target: {fileID: 258706771419776584, guid: 27fd9e4d47472cd4db1cd8341df80012,
+        type: 3}
+      propertyPath: completionReductionValue
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 258706771274101532, guid: 27fd9e4d47472cd4db1cd8341df80012,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -5416,10 +5421,20 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 120786058}
+    - target: {fileID: 2355399024662673964, guid: f5833e07485ac2d4b9b583662a62f4c1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7933255556126448616, guid: f5833e07485ac2d4b9b583662a62f4c1,
         type: 3}
       propertyPath: waitCounterReset
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7933255556126448616, guid: f5833e07485ac2d4b9b583662a62f4c1,
+        type: 3}
+      propertyPath: completionReductionValue
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 7933255556126448405, guid: f5833e07485ac2d4b9b583662a62f4c1,
         type: 3}
@@ -6027,6 +6042,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CD
       objectReference: {fileID: 0}
+    - target: {fileID: 3475412196489928343, guid: 7bafd4da79b2cf547a561f63098c29b7,
+        type: 3}
+      propertyPath: completionReductionValue
+      value: 1.4
+      objectReference: {fileID: 0}
     - target: {fileID: 8449192929646228864, guid: 7bafd4da79b2cf547a561f63098c29b7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6629,7 +6649,7 @@ PrefabInstance:
     - target: {fileID: 7022114164760569424, guid: ca857cf37affdf84dbc55f3b391490b3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7022114164760569424, guid: ca857cf37affdf84dbc55f3b391490b3,
         type: 3}
@@ -6701,7 +6721,7 @@ PrefabInstance:
     - target: {fileID: 8932150904793486208, guid: ca857cf37affdf84dbc55f3b391490b3,
         type: 3}
       propertyPath: nextTaskCount
-      value: 45
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1184097994, guid: ca857cf37affdf84dbc55f3b391490b3, type: 3}
       propertyPath: second
@@ -7448,7 +7468,7 @@ MonoBehaviour:
   throwCompletionValue: 0
   currentTaskCompletionValue: 0
   maxTaskCompletionValue: 100
-  completionReductionValue: 0.5
+  completionReductionValue: 0.9
   waitForReduction: 3
 --- !u!54 &9111962883119246282
 Rigidbody:
