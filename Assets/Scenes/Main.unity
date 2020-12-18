@@ -6597,6 +6597,11 @@ PrefabInstance:
       propertyPath: penaltyUI
       value: 
       objectReference: {fileID: 1569732313}
+    - target: {fileID: 7022114165567353817, guid: ca857cf37affdf84dbc55f3b391490b3,
+        type: 3}
+      propertyPath: penaltyAmount
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 556396874, guid: ca857cf37affdf84dbc55f3b391490b3, type: 3}
       propertyPath: godmodeToggle
       value: 
@@ -6721,11 +6726,15 @@ PrefabInstance:
     - target: {fileID: 8932150904793486208, guid: ca857cf37affdf84dbc55f3b391490b3,
         type: 3}
       propertyPath: nextTaskCount
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1184097994, guid: ca857cf37affdf84dbc55f3b391490b3, type: 3}
       propertyPath: second
-      value: 30
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1184097994, guid: ca857cf37affdf84dbc55f3b391490b3, type: 3}
+      propertyPath: minute
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca857cf37affdf84dbc55f3b391490b3, type: 3}

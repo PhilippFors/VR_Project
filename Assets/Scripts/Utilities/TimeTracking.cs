@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TimeTracking : MonoBehaviour
 {
-    public int minute;
-    public int second;
+    public int minute = 3;
+    public int second = 0;
     float temp = 1;
     private void Start()
     {
@@ -19,10 +19,11 @@ public class TimeTracking : MonoBehaviour
         MyEventSystem.instance.UpdateSecond(second);
         MyEventSystem.instance.UpdateMinute(minute);
     }
-
+    bool stop;
     IEnumerator Clock()
     {
-        while (true)
+        stop = false;
+        while (!stop)
         {
             temp -= Time.deltaTime;
             if (temp <= 0)
@@ -39,11 +40,18 @@ public class TimeTracking : MonoBehaviour
                 MyEventSystem.instance.UpdateMinute(minute);
                 MyEventSystem.instance.UpdateSecond(second);
             }
-
+            
             if (minute == 0 && second == 0)
-                yield break;
+                stop = true;
 
             yield return null;
         }
+
+        GameManager.instance.dead = true;
+        JobTask[] tasks = FindObjectsOfType<JobTask>();
+        foreach (JobTask task in tasks)
+            task.StopTaskReduction();
+        yield return new WaitForSeconds(3f);
+        GameManager.instance.ReturnToStartMenu();
     }
 }

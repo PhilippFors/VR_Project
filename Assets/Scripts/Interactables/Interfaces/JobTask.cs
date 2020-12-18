@@ -180,7 +180,7 @@ public class JobTask : IInteractable
             currentTaskCompletionValue += value * Time.deltaTime;
     }
 
-    protected void StopTaskReduction()
+    public void StopTaskReduction()
     {
         if (coroutine != null)
             StopCoroutine(coroutine);
